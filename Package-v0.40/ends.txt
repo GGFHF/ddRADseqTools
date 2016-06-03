@@ -1,0 +1,61 @@
+# This file contains end sequences integrated by indexes, degenerate nucleotides to indentify
+# the PCR duplicates (DBR), adapter and primer. A read has two ends: one where the adapter 1
+#  is and another where adapter 2 is.
+# 
+# IND1_IND2_DBR technique: The sequence of the end corresponding to the adapter 1 includes
+# a index1 sequence (111..., each digit 1 represents a nucleotide of the index1), the sequence
+# of the end corresponing to the adapter 2 include a index2 sequence (222..., each digit 2
+# represents a nucleotide of the index2). A DBR sequence (333..., each digit 3 represents a
+# nucleotide of the DBR) must be included in the end sequence of adapter 1 or adapter2.
+# 
+# IND1_IND2 technique: The sequence of the end corresponding to the adapter 1 includes
+# a index1 sequence (111...), the sequence of the end corresponing to the adapter 2 include a
+# index2 sequence (222...). The DBR sequence (333...) is not considered.
+#
+# IND1_DBR technique: The sequence of the end corresponding to the adapter 1 includes a index1
+# sequence (111...) and a DBR sequence (333...).  The index2 sequence (222...) is not
+# considered.
+#
+# IND1 technique: The sequence of the end corresponding to the adapter 1 includes a index1
+# sequence (111...). The index2 sequence (222...) and the DBR sequence (333...) are not
+# considered.
+#
+# The length of index1 (111...), index2 (222...) and DBR (333...) of ends used by a program
+# must be equal to the value of the options index1len, index2len and dbrlen received by
+# that program.
+#
+# RECORD FORMAT: end_id;end_seq(5'->3')
+#
+end01;AATGATACGGCGACCACCGAGATCTACACTCTTTCCCTACACGACGCTCTTCCGATCT111111C
+end02;CAAGCAGAAGACGGCATACGAGAT3333222222GTGACTGGAGTTCAGACGTGTGCTCTTCCGATC
+end03;CAAGCAGAAGACGGCATACGAGAT111111GTGACTGGAGTTCAGACGTGTGCTCTTCCGATC
+end04;AATGATACGGCGACCACCGAGATCTACACACACTCTTTCCCTACACGACGCTCTTCCGATC
+end05;CAAGCAGAAGACGGCATACGAGAT3333111111GTGACTGGAGTTCAGACGTGTGCTCTTCCGATC
+end06;AATGATACGGCGACCACCGAGATCTACACACACTCTTTCCCTACACGACGCTCTTCCGATC
+end07;CAAGCAGAAGACGGCATACGAGAT3333111111GTGACTGGAGTTCAGACGTGTGCTCTTCCGATC
+end08;AATGATACGGCGACCACCGAGATCTACAC222222ACACTCTTTCCCTACACGACGCTCTTCCGATC
+end09;CAAGCAGAAGACGGCATACGAGAT111111GTGACTGGAGTTCAGACGTGTGCTCTTCCGATC
+end10;AATGATACGGCGACCACCGAGATCTACACACACTCTTTCCCTACACGACGCTCTTCCGATC
+#
+end51;111111
+end52;
+#
+end61;3333111111
+end62;
+end63;33331111111
+end64;
+end65;333331111111
+end66;
+#
+end71;111111
+end72;222222
+end73;11111
+end74;22222
+#
+end81;111111
+end82;3333222222
+#
+end91;3333111111
+end92;222222
+end93;33331111111
+end94;2222222

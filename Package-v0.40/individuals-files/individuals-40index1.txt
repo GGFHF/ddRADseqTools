@@ -1,0 +1,49 @@
+# This file contains the sequences of each invidual: index1 sequences that are attached
+# to the 5' end of the Watson strand and, optionally, the index2 sequences that are attached
+# to the 5' end of the Crick strand.
+#
+# RECORD FORMAT: individual_id;replicated_individual_id or NONE;population_id;index1_seq(5'->3');[index2_seq(5'->3')]
+#
+# Sample: 40 index1s (5 bp) without index2 (based in http://dx.doi.org/10.5061/dryad.c5232).
+
+
+OR4;NONE;pop01;ACCTAC;
+KZ3;NONE;pop01;ACGTAG;
+VSS1;NONE;pop01;ACTCGT;
+LO24;NONE;pop01;AGACCA;
+RE13;NONE;pop01;AGACGT;
+LO74;NONE;pop01;AGGTAC;
+KZ4;NONE;pop01;AGTCGA;
+re9;NONE;pop01;AGACCG;
+or32;NONE;pop01;AGACGA;
+or31;NONE;pop01;AGCATG;
+or30;NONE;pop01;AGCTTC;
+or29;NONE;pop01;AGGTTC;
+or20;NONE;pop01;AGGTTG;
+or19;NONE;pop01;AGTCCT;
+or15;NONE;pop01;TGTCGA;
+or13;NONE;pop01;CAACTC;
+or7;NONE;pop01;CAAGTG;
+or5;NONE;pop01;CACTCA;
+ma5;NONE;pop01;CACTGT;
+ma2;NONE;pop01;CAGTCT;
+kz39;NONE;pop01;CTAGAG;
+kz36;NONE;pop01;CTAGTC;
+kz20;NONE;pop01;CTCACA;
+kz18;NONE;pop01;CTGTCA;
+kz17;NONE;pop01;CTGTGT;
+kz16;NONE;pop01;CTTCAG;
+kz7;NONE;pop01;CTTCTC;
+kz2;NONE;pop01;GAACTG;
+re107;NONE;pop01;GAAGAG;
+re108;NONE;pop01;GACAGT;
+re572;NONE;pop01;GACTGA;
+re62;NONE;pop01;GAGTCA;
+re63;NONE;pop01;GATCTC;
+be274;NONE;pop01;GTACTC;
+be275;NONE;pop01;TCACGT;
+lo71;NONE;pop01;TCGATC;
+lo72;NONE;pop01;TCTCGA;
+lo75;NONE;pop01;TGCAAG;
+lo76;NONE;pop01;TGGATG;
+or3;NONE;pop01;TGTCCA;

@@ -1,0 +1,8 @@
+#genfile=../Genomes/genome.fna                                    # Saccharomyces cerevisiae, Chromosome I
+genfile=../Genomes/GCF_000146045.2_R64_genomic.fna.gz            # Saccharomyces cerevisiae
+#genfile=../Genomes/GCF_000002985.6_WBcel235_genomic.fna.gz       # Caenorhabditis elegans
+#genfile=GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz    # Drosophila melanogaster
+#genfile=../Genomes/GCF_000001405.29_GRCh38.p3_genomic.fna.gz     # Homo sapiens
+#genfile=../Genomes/ena.fasta                                     # Quercus robur
+#genfile=../Genomes/ptaeda.v1.01.scaffolds.fasta.gz               # Pinus taeda
+seq=AATGATACGGCGACCACCGAGATCTACACNNNNNNNACACTCTTTCCCTACACGACGCTCTTCCGATC

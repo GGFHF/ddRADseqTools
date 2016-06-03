@@ -1,0 +1,32 @@
+# This file contains the sequences of each invidual: index1 sequences that are attached
+# to the 5' end of the Watson strand and, optionally, the index2 sequences that are attached
+# to the 5' end of the Crick strand.
+#
+# RECORD FORMAT: individual_id;replicated_individual_id or NONE;population_id;index1_seq(5'->3');[index2_seq(5'->3')]
+#
+# Sample: 24 index1s (6bp) without index2 -> up 24 individuals.
+
+ind01;NONE;pop01;GGTCTT;
+ind02;NONE;pop01;CTGGTT;
+ind03;NONE;pop01;AAGATA;
+ind04;NONE;pop01;ACTTCC;
+ind05;NONE;pop01;TTACGG;
+ind06;NONE;pop01;AACGAA;
+ind07;NONE;pop01;ATTCAT;
+ind08;NONE;pop01;CCGACC;
+ind09;NONE;pop01;ATCGTC;
+ind10;NONE;pop01;CATCAA;
+ind11;NONE;pop01;GCCTGG;
+ind12;NONE;pop01;TGCTTG;
+ind13;NONE;pop01;TCGCAT;
+ind14;NONE;pop01;GGTAGA;
+ind15;NONE;pop01;GGAGCG;
+ind16;NONE;pop01;TTGAAC;
+ind17;NONE;pop01;GATTAC;
+ind18;NONE;pop01;CGAGGC;
+ind19;NONE;pop01;CAACCG;
+ind20;NONE;pop01;GTATGA;
+ind21;NONE;pop01;TGGATT;
+ind22;NONE;pop01;CCAGCT;
+ind11_r;ind11;pop01;AACTCG;
+ind17_r;ind17;pop01;ACCAGA;
