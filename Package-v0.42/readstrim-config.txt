@@ -1,0 +1,14 @@
+technique=IND1_IND2_DBR               # IND1 (only index1), IND1_DBR (index1 + DBR), IND1_IND2 (index1 + index2) or IND1_IND2_DBR (index1 + index2 + DBR)
+format=FASTQ                          # FASTA or FASTQ (format of fragments file)
+readtype=PE                           # SE (single-end) or PE (pair-end)
+endsfile=./ends.txt                   # path oh the end selengthquences file
+index1len=6                           # index sequence length in the adapter 1
+index2len=6                           # index sequence length in the adapter 2 (it must be 0 when technique is IND1)
+dbrlen=4                              # DBR sequence length (it must be 0 when technique is IND1 or IND1_IND2)
+wend=end01                            # code used in endsfile corresponding to the end where the adapter 1 is
+cend=end02                            # code used in endsfile corresponding to the end where the adapter 2 is
+readsfile1=./results/reads-1.fastq    # path of the reads file in SE read type or the Watson strand reads file in PE case
+readsfile2=./results/reads-2.fastq    # path of the Crick strand reads file in PE read type or NONE in SE case
+trimfile=./results/reads-trimmed      # path of the output file with trimmed reads without extension
+verbose=YES                           # additional job status info during the run: YES or NO
+trace=NO                              # additional info useful to the developer team: YES or NO

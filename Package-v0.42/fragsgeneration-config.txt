@@ -1,0 +1,12 @@
+fragsfile=./results/fragments.fasta         # path of the fragments file
+rsfile=./restrictionsites.txt               # path of the restriction sites file
+enzyme1=EcoRI                               # code of 1st restriction enzyme used in rsfile or its restriction site sequence
+enzyme2=MseI                                # code of 2nd restriction enzyme used in rsfile or its restriction site sequence
+fragsnum=10000                              # fragments number
+minfragsize=201                             # lower boundary of loci fragment's size
+maxfragsize=300                             # upper boundary of loci fragment's size
+fragstfile=./results/fragments-stats.txt    # path of the output statistics file
+fragstinterval=25                           # interval length of fragment size
+plot=YES                                    # statistical graphs: YES or NO
+verbose=YES                                 # additional job status info during the run: YES or NO
+trace=NO                                    # additional info useful to the developer team: YES or NO

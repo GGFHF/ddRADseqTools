@@ -1,0 +1,32 @@
+fragsfile=./results/fragments.fasta         # path of the fragments file
+technique=IND1_IND2_DBR                     # IND1 (only index1), IND1_DBR (index1 + DBR), IND1_IND2 (index1 + index2) or IND1_IND2_DBR (index1 + index2 + DBR)
+format=FASTQ                                # FASTA or FASTQ (format of fragments file)
+readsfile=./results/reads                   # path of the output file with generated sequences without extension
+readtype=PE                                 # SE (single-end) or PE (pair-end)
+rsfile=./restrictionsites.txt               # path of the restriction sites file
+enzyme1=EcoRI                               # code of 1st restriction enzyme used in rsfile or its restriction site sequence
+enzyme2=MseI                                # code of 2nd restriction enzyme used in rsfile or its restriction site sequence
+endsfile=./ends.txt                         # path oh the end selengthquences file
+index1len=6                                 # index sequence length in the adapter 1
+index2len=6                                 # index sequence length in the adapter 2 (it must be 0 when technique is IND1)
+dbrlen=4                                    # DBR sequence length (it must be 0 when technique is IND1 or IND1_IND2)
+wend=end01                                  # code used in endsfile corresponding to the end where the adapter 1 is
+cend=end02                                  # code used in endsfile corresponding to the end where the adapter 2 is
+individualsfile=./individuals.txt           # path of individuals file
+locinum=100                                 # loci number to sample
+readsnum=10000                              # reads number
+minreadvar=0.8                              # lower variation on reads number per locus (0.5 <= minreadvar <= 1.0)
+maxreadvar=1.2                              # upper variation on reads number per locus (1.0 <= maxreadvar <= 1.5)
+insertlen=100                               # read length, i. e. genome sequence length inserted in reads
+mutprob=0.2                                 # mutation probability (0.0 <= mutprob < 1.0)
+locusmaxmut=1                               # maximum mutations number by locus (1 <= locusmaxmut <= 5)
+indelprob=0.4                               # insertion/deletion probability (0.0 <= indelprob < 1.0)
+maxindelsize=3                              # upper insertion/deletion size (1 <= maxindelsize < 30)
+dropout=0.0                                 # mutation probability in the enzyme recognition sites (0.0 <= dropout < 1.0)
+pcrdupprob=0.0                              # PCR duplicates probability in a locus (0.0 <= pcrdupprob < 1.0)
+pcrdistribution=MULTINOMIAL                 # distribution type to calculate the PCR duplicates number: MULTINOMIAL or POISSON
+multiparam=0.333,0.267,0.200,0.133,0.067    # probability values to multinomial distribution with format prob1,prob2,...,probn (they must sum 1.0)
+poissonparam=1.0                            # lambda value of the Poisson distribution
+gcfactor=0.0                                # weight factor of GC ratio in a locus with PCR duplicates (0.0 <= gcfactor < 1.0)
+verbose=YES                                 # additional job status info during the run: YES or NO
+trace=NO                                    # additional info useful to the developer team: YES or NO

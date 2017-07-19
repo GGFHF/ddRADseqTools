@@ -1,0 +1,9 @@
+format=FASTQ                                   # FASTA or FASTQ (format of fragments file)
+readtype=PE                                    # SE (single-end) or PE (pair-end)
+readsfile1=./results/reads-1.fastq             # path of the reads file in SE read type or the Watson strand reads file in PE case
+readsfile2=./results/reads-2.fastq             # path of the Crick strand reads file in PE read type or NONE in SE case
+clearfile=./results/reads-cleared              # path of the output file with PCR duplicates removed without extension
+dupstfile=./results/pcrduplicates-stats.txt    # path of the the PCR duplicates statistics file
+plot=YES                                       # statistical graphs: YES or NO
+verbose=YES                                    # additional job status info during the run: YES or NO
+trace=NO                                       # additional info useful to the developer team: YES or NO

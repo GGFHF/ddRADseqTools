@@ -1,0 +1,4 @@
+genfile=./genomes/genome.fasta    # file of the reference genome in fasta format
+seq=TGGAGGTGGGG                   # sequence to be located
+verbose=YES                       # additional job status info during the run: YES or NO
+trace=NO                          # additional info useful to the developer team: YES or NO
