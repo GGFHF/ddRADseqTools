@@ -3,11 +3,17 @@
 
 #-------------------------------------------------------------------------------
 
-'''This software has been developed by Forest Genetics and Physiology Research Group,
-   Technical University of Madrid (UPM)
+'''This software has been developed by:
+
+       GI Genética, Fisiología e Historia Forestal
+       Dpto. Sistemas y Recursos Naturales
+       ETSI Montes, Forestal y del Medio Natural
+       Universidad Politécnica de Madrid
+       https://github.com/ggfhf/
 
    Licence: GNU General Public Licence Version 3
 '''
+
 #-------------------------------------------------------------------------------
 
 '''This source contains the program of the ddRADseqTools software package that
