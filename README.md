@@ -1,3 +1,5 @@
+# ddRADseqTools
+
 ddRADseqTools is a set of applications useful to in silico design and testing of
 double digest RADseq (ddRADseq) experiments. This software has been developed by:
 
@@ -5,9 +7,11 @@ double digest RADseq (ddRADseq) experiments. This software has been developed by
     Dpto. Sistemas y Recursos Naturales
     ETSI Montes, Forestal y del Medio Natural
     Universidad Politécnica de Madrid
+    
+    http://gfhforestal.com/
     https://github.com/ggfhf/
 
-Refer to the ddRADseqTools-manual.pdf in the "Package-v0.42/manual" folder for installation
+Refer to the ddRADseqTools-manual.pdf in the "Package/manual" folder for installation
 instructions, a description of the software and examples of use.
 
 Also, you can see the paper:

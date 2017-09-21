@@ -1,4 +1,4 @@
-Changes of v0.40 to v0.42 (July 2017)
+Changes of v 0.40 to v 0.42 (July 2017)
 
 * Fixed a bug in the algorithm to mutate sequences that occurs when there is
   more than one SNP or indel.
