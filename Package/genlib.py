@@ -46,7 +46,7 @@ def get_project_version():
     '''Get the project name.'''
 
     # assign the project version
-    project_version = '0.42'
+    project_version = '0.43'
 
     # return the project name:
     return project_version
@@ -119,21 +119,21 @@ def get_config_file(path):
 def get_ressites(rsfile, enzyme1, enzyme2):
     '''Get the restriction sites sequences. The variables enzyme1 and enzyme2 can
        hold a valid nucleotides sequence corresponding to the restriction sites
-       sequence of an enzyme or an enzyme code. In last case, the restriction site
-       sequence is searched in rsfile.
+       sequence of an enzyme or an enzyme identifier. In last case, the restriction
+       site sequence is searched in rsfile.
     '''
 
-    # if enzyme1 and enzyme2 have a valid nucleotides sequence
-    if is_valid_sequence(enzyme1) and is_valid_sequence(enzyme2):
+    # initialize the control variables
+    enzyme1_found = False
+    enzyme2_found = False
+
+    # if enzyme1 has a valid nucleotides sequence
+    if is_valid_sequence(enzyme1, ['*']):
         ressite1_seq = enzyme1
-        ressite2_seq = enzyme2
+        enzyme1_found = True
 
-    # else they are codes
+    # else enzyme1 is an identifier
     else:
-
-        # initialize the control variables
-        enzyme1_found = False
-        enzyme2_found = False
 
         # open the rsfile
         try:
@@ -141,14 +141,14 @@ def get_ressites(rsfile, enzyme1, enzyme2):
         except:
             raise ProgramError('F002', rsfile)
 
-        # set the pattern of the rsfile record (enzyme_id|restriction_site_seq)
+        # set the pattern of the rsfile record (enzyme_id;restriction_site_seq)
         pattern = r'^(.*);(.*)$'
 
         # read the first record
         record = rsfile_id.readline()
 
         # while there are records and the two enzymes are not found
-        while record != '' and not (enzyme1_found and enzyme2_found):
+        while record != '' and not enzyme1_found:
 
             # if the record is not a comment nor a line with blank characters
             if not record.lstrip().startswith('#') and record.strip() != '':
@@ -162,13 +162,59 @@ def get_ressites(rsfile, enzyme1, enzyme2):
                     raise ProgramError('D102', record.strip('\n'), rsfile)
 
                 # verify that the data are correct
-                if not is_valid_sequence(restriction_site_seq, ['*']):
+                if not is_valid_sequence(restriction_site_seq, cut_tag_check=True):
                     raise ProgramError('D103', restriction_site_seq, rsfile)
 
                 # assign the data
                 if enzyme_id == enzyme1:
                     ressite1_seq = restriction_site_seq
                     enzyme1_found = True
+
+            # read the next record
+            record = rsfile_id.readline()
+
+        # close the rsfile
+        rsfile_id.close()
+
+    # if enzyme2 has a valid nucleotides sequence
+    if is_valid_sequence(enzyme2, cut_tag_check=True):
+        ressite2_seq = enzyme2
+        enzyme2_found = True
+
+    # else enzyme2 is an identifier
+    else:
+
+        # open the rsfile
+        try:
+            rsfile_id = open(rsfile, mode='r', encoding='iso-8859-1')
+        except:
+            raise ProgramError('F002', rsfile)
+
+        # set the pattern of the rsfile record (enzyme_id;restriction_site_seq)
+        pattern = r'^(.*);(.*)$'
+
+        # read the first record
+        record = rsfile_id.readline()
+
+        # while there are records and the two enzymes are not found
+        while record != '' and not enzyme2_found:
+
+            # if the record is not a comment nor a line with blank characters
+            if not record.lstrip().startswith('#') and record.strip() != '':
+
+                # extract the data
+                try: 
+                    mo = re.search(pattern, record)
+                    enzyme_id = mo.group(1).strip()
+                    restriction_site_seq = mo.group(2).strip().lower()
+                except:
+                    raise ProgramError('D102', record.strip('\n'), rsfile)
+
+                # verify that the data are correct
+                if not is_valid_sequence(restriction_site_seq, cut_tag_check=True):
+                    raise ProgramError('D103', restriction_site_seq, rsfile)
+
+                # assign the data
                 if enzyme_id == enzyme2:
                     ressite2_seq = restriction_site_seq
                     enzyme2_found = True
@@ -176,15 +222,18 @@ def get_ressites(rsfile, enzyme1, enzyme2):
             # read the next record
             record = rsfile_id.readline()
 
-        # control the two enzymes are found
-        if not enzyme1_found or not enzyme2_found:
-            if not enzyme1_found:
-                enzymes_text = enzyme1
-            if not enzyme2_found and enzyme1_found:
-                enzymes_text = enzyme2
-            if not enzyme2_found and not enzyme1_found:
-                enzymes_text += ' & ' + enzyme2
-            raise ProgramError('D301', enzymes_text)
+        # close the rsfile
+        rsfile_id.close()
+
+    # control the two enzymes are found
+    if not enzyme1_found or not enzyme2_found:
+        if not enzyme1_found:
+            enzymes_text = enzyme1
+        if not enzyme2_found and enzyme1_found:
+            enzymes_text = enzyme2
+        if not enzyme2_found and not enzyme1_found:
+            enzymes_text += ' & ' + enzyme2
+        raise ProgramError('D301', enzymes_text)
 
     # get the cutted restriction sites
     cutsite1 = ressite1_seq.find('*')
@@ -203,9 +252,6 @@ def get_ressites(rsfile, enzyme1, enzyme2):
     # remove the cut mark of the restriction site
     ressite1_seq = remove_cutmark(ressite1_seq)
     ressite2_seq = remove_cutmark(ressite2_seq)
-
-    # close the rsfile
-    rsfile_id.close()
 
     # return the the restriction sites
     return (ressite1_seq, ressite1_lcut_seq, ressite1_rcut_seq, ressite2_seq, ressite2_lcut_seq, ressite2_rcut_seq)
@@ -496,25 +542,41 @@ def get_fragments_list(fragsfile):
 
 #-------------------------------------------------------------------------------
 
-def is_valid_sequence(seq, other_allowed_characters_list=[]):
+def is_valid_sequence(seq, other_allowed_characters_list=[], cut_tag_check=False):
     '''Verify if seq have a valid nucleotides sequence. In addition to standard
        codes, others allowed characters can be passed.
     '''
 
-    # the four nucleotides
-    nts_list = ['A', 'a', 'T', 't', 'C', 'c', 'G', 'g']
-
     # initialize the control variable
-    result = True
+    OK = True
+
+    # set valid nucleotide list
+    nucleotide_list = ['A', 'a', 'T', 't', 'C', 'c', 'G', 'g']
+
+    # set cut tag and cut tag count
+    cut_tag = '*'
+    cut_tag_count = 0
 
     # verify each nucleotide of the sequence
     for i in range(len(seq)):
-       if seq[i] not in nts_list and seq[i] not in other_allowed_characters_list:
-            result = False
-            break
+        if cut_tag_check:
+           if seq[i] not in nucleotide_list and seq[i] != cut_tag and seq[i] not in other_allowed_characters_list:
+                OK = False
+                break
+           if seq[i] == cut_tag:
+                cut_tag_count += 1
+        else:
+           if seq[i] not in nucleotide_list and seq[i] not in other_allowed_characters_list:
+                OK = False
+                break
 
-    # return the verification result
-    return result
+    # verify the cut tag count
+    if cut_tag_check:
+        if cut_tag_count != 1:
+            OK = False
+
+    # return the control variable
+    return OK
 
 #-------------------------------------------------------------------------------
 
@@ -1754,8 +1816,8 @@ def get_all_options_dict():
         'dropout': {'value':'', 'default':'0.0', 'comment':'mutation probability in the enzyme recognition sites (0.0 <= dropout < 1.0)'},
         'dupstfile': {'value':'', 'default':'./results/pcrduplicates-stats.txt', 'comment':'path of the the PCR duplicates statistics file'},
         'endsfile': {'value':'', 'default':'./ends.txt', 'comment':'path oh the end selengthquences file'},
-        'enzyme1': {'value':'', 'default':'EcoRI', 'comment':'code of 1st restriction enzyme used in rsfile or its restriction site sequence'},
-        'enzyme2': {'value':'', 'default':'MseI', 'comment':'code of 2nd restriction enzyme used in rsfile or its restriction site sequence'},
+        'enzyme1': {'value':'', 'default':'EcoRI', 'comment':'id of 1st restriction enzyme used in rsfile or its restriction site sequence'},
+        'enzyme2': {'value':'', 'default':'MseI', 'comment':'id of 2nd restriction enzyme used in rsfile or its restriction site sequence'},
         'format': {'value':'', 'default':'FASTQ', 'comment':'FASTA or FASTQ (format of fragments file)'},
         'fragsfile': {'value':'', 'default':'./results/fragments.fasta', 'comment':'path of the fragments file'},
         'fragsnum': {'value':'', 'default':'10000', 'comment':'fragments number'},
@@ -2303,7 +2365,7 @@ class ProgramError(Exception):
         elif code_exception == 'D205':
             Message.print('error', '*** ERROR {0}: {1} is not a valid value in option {2}. It must be YES or NO.'.format(code_exception, param2, param1))
         elif code_exception == 'D301':
-            Message.print('error', '*** ERROR {0}: Enzyme identification {1} not found in {2}.'.format(code_exception, param1, param2))
+            Message.print('error', '*** ERROR {0}: Enzyme identification or restriction site sequence {1} is not valid.'.format(code_exception, param1))
         elif code_exception == 'D302':
             Message.print('error', "*** ERROR {0}: The cut mark '*' is not found in the restriction site sequence {1}.".format(code_exception, param1))
         elif code_exception == 'D303':
