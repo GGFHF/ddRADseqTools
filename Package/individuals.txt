@@ -1,24 +1,24 @@
-# This file contains the sequences of each invidual: index1 sequences that are attached
-# to the 5' end of the Watson strand and, optionally, the index2 sequences that are attached
-# to the 5' end of the Crick strand.
-#
-# RECORD FORMAT: individual_id;replicated_individual_id or NONE;population_id;index1_seq(5'->3');[index2_seq(5'->3')]
-#
-# Sample: 8 index1 (6bp) and 6 index2 (6bp) by index1 -> up 48 individuals.
+# This file contains the sequences of each invidual: index1 sequences that are attached to the
+# 5' end of the Watson strand and, optionally, the index2 sequences that are attached to the
+# 5' end of the Crick strand.
+
+# RECORD FORMAT: individual_id;replicated_individual_id or NONE;population_id;index1_seq(5'->3' in Watson strand);[index2_seq(5'->3' in Crick strand)]
+
+# These data corresponding to an example with 8 index1 (6bp) and 6 index2 (6bp) by index1 -> up 48 individuals.
 
 ind0101;NONE;pop01;GGTCTT;ATCACG
 ind0102;NONE;pop01;GGTCTT;CGATGT
 ind0103;NONE;pop01;GGTCTT;TTAGGC
 ind0104;NONE;pop01;GGTCTT;TGACCA
 ind0105;NONE;pop01;GGTCTT;ACAGTG
-ind0103_r;ind0103;pop01;GGTCTT;GCCAAT
+ind0103r;ind0103;pop01;GGTCTT;GCCAAT
 
 ind0201;NONE;pop01;CTGGTT;ATCACG
 ind0202;NONE;pop01;CTGGTT;CGATGT
 ind0203;NONE;pop01;CTGGTT;TTAGGC
 ind0204;NONE;pop01;CTGGTT;TGACCA
 ind0205;NONE;pop01;CTGGTT;ACAGTG
-ind0204_r;ind0204;pop01;CTGGTT;GCCAAT
+ind0204r;ind0204;pop01;CTGGTT;GCCAAT
 
 ind0301;NONE;pop01;AAGATA;ATCACG
 ind0302;NONE;pop01;AAGATA;CGATGT

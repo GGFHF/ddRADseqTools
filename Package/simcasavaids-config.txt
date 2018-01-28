@@ -1,0 +1,5 @@
+readtype=PE                               # SE (single-end) or PE (pair-end)
+input_readfile=./results/reads-1.fastq    # path of the read file
+filenum=1                                 # 1: in SE file or the first file in PE files; 2: the second file in PE files
+verbose=YES                               # additional job status info during the run: YES or NO
+trace=NO                                  # additional info useful to the developer team: YES or NO

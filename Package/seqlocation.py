@@ -77,7 +77,7 @@ def locate_seq(options_dict):
 
     # ...
     Message.print('info', 'seq to be locate: {0}'.format(seq))
-    Message.print('info', 'reverse compl.  : {0}'.format(get_reversed_complementary_sequence(seq)))
+    Message.print('info', 'reverse compl.  : {0}'.format(get_reverse_complementary_sequence(seq)))
 
     # open the genome file
     try:
@@ -143,7 +143,7 @@ def locate_seq(options_dict):
             start = watson_locus_seq.find(seq.upper(), (start + len(seq)))
 
         # get the sequence of the Crick strand
-        crick_locus_seq = get_reversed_complementary_sequence(watson_locus_seq)
+        crick_locus_seq = get_reverse_complementary_sequence(watson_locus_seq)
 
         # find the first location in Crick locus sequence
         start = crick_locus_seq.find(seq.upper())

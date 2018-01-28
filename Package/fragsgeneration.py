@@ -73,10 +73,28 @@ def generate_fragments(options_dict):
     verbose = options_dict['verbose']['value']
     trace = options_dict['trace']['value']
 
-    # get the restriction sites sequences
+    # get the restriction site sequences
     (ressite1_seq, ressite1_lcut_seq, ressite1_rcut_seq, ressite2_seq, ressite2_lcut_seq, ressite2_rcut_seq) = get_ressites(rsfile, enzyme1, enzyme2)
     Message.print('trace', 'ressite1_seq: {0} - ressite1_lcut_seq: {1} - ressite1_rcut_seq: {2}'.format(ressite1_seq, ressite1_lcut_seq, ressite1_rcut_seq))
     Message.print('trace', 'ressite2_seq: {0} - ressite2_lcut_seq: {1} - ressite2_rcut_seq: {2}'.format(ressite2_seq, ressite2_lcut_seq, ressite2_rcut_seq))
+
+    # get the restriction_overhangs
+    if len(ressite1_lcut_seq) >= len(ressite1_rcut_seq):
+        resoverhang1_seq = get_reverse_complementary_sequence(ressite1_lcut_seq)
+    else:
+        resoverhang1_seq = ressite1_rcut_seq
+    if len(ressite2_lcut_seq) >= len(ressite2_rcut_seq):
+        resoverhang2_seq = ressite1_lcut_seq
+    else:
+        resoverhang2_seq = get_reverse_complementary_sequence(ressite2_rcut_seq)
+    Message.print('trace', 'resoverhang1_seq: {0}'.format(resoverhang1_seq))
+    Message.print('trace', 'resoverhang2_seq: {0}'.format(resoverhang2_seq))
+
+    # get the list of sequences corresponding to each enzyme
+    unambiguous_ressite1_seq_list = get_unambiguous_sequence_list(ressite1_seq.upper())
+    unambiguous_ressite2_seq_list = get_unambiguous_sequence_list(ressite2_seq.upper())
+    Message.print('trace', 'unambiguous_ressite1_seq_list: {0}'.format(unambiguous_ressite1_seq_list))
+    Message.print('trace', 'unambiguous_ressite2_seq_list: {0}'.format(unambiguous_ressite2_seq_list))
 
     # open the fragments file
     try:
@@ -99,17 +117,22 @@ def generate_fragments(options_dict):
         # add 1 to the count of fragments written
         written_fragments_count += 1
 
+        # get the unambiguous sequences of the restriction sites corresponding to the fragment
+        unambiguous_ressite1_seq = unambiguous_ressite1_seq_list[random.randrange(0, len(unambiguous_ressite1_seq_list))]
+        unambiguous_ressite2_seq = unambiguous_ressite2_seq_list[random.randrange(0, len(unambiguous_ressite2_seq_list))]
+
         # get the sequence of the fragment
-        fragment_seq_len = random.randrange(minfragsize, maxfragsize + 1)
-        random_seq_len = fragment_seq_len - len(ressite1_rcut_seq) - len(ressite2_lcut_seq)
-        fragment_seq = build_random_sequence(random_seq_len, ressite1_seq, ressite1_rcut_seq, ressite2_seq, ressite2_lcut_seq)
+        fragment_len = random.randrange(minfragsize, maxfragsize + 1)
+        random_len = fragment_len - len(resoverhang1_seq) - len(resoverhang2_seq)
+        random_seq = build_random_sequence(random_len, unambiguous_ressite1_seq_list, unambiguous_ressite2_seq_list)
+        fragment_seq = '{0}{1}{2}'.format(unambiguous_ressite1_seq[len(ressite1_seq)-len(resoverhang1_seq):], random_seq, unambiguous_ressite2_seq[:len(resoverhang2_seq)])
 
         # calculate the GC rate and the N count
         (GC_rate, N_count) = get_GC_N_data(fragment_seq)
         GC_rate_formatted = '{0:3.2f}'.format(GC_rate)
 
         # write the FASTA head and fragment in the fragments file
-        fragsfile_id.write('>fragment: {0:d} | length: {1:d} | GC: {2}  | locus: fragment generated randomly\n'.format(written_fragments_count, fragment_seq_len, GC_rate_formatted))
+        fragsfile_id.write('>fragment: {0:d} | length: {1:d} | GC: {2}  | locus: fragment generated randomly\n'.format(written_fragments_count, fragment_len, GC_rate_formatted))
         fragsfile_id.write('{0}\n'.format(fragment_seq))
 
         # update the GC distribution
@@ -119,7 +142,7 @@ def generate_fragments(options_dict):
         Message.print('verbose', '\rFragments written: {0:9d}'.format(written_fragments_count))
 
         # update the intervals with the fragment length
-        intervals_dict = update_fragments_intervals(intervals_dict, fragstinterval, fragment_seq_len, N_count)
+        intervals_dict = update_fragments_intervals(intervals_dict, fragstinterval, fragment_len, N_count)
 
     # close files
     fragsfile_id.close()

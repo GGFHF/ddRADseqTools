@@ -3,21 +3,23 @@
 
 #-------------------------------------------------------------------------------
 
-'''This software has been developed by:
+'''
+This software has been developed by:
 
-       GI Genética, Fisiología e Historia Forestal
-       Dpto. Sistemas y Recursos Naturales
-       ETSI Montes, Forestal y del Medio Natural
-       Universidad Politécnica de Madrid
-       https://github.com/ggfhf/
+    GI Genética, Fisiología e Historia Forestal
+    Dpto. Sistemas y Recursos Naturales
+    ETSI Montes, Forestal y del Medio Natural
+    Universidad Politécnica de Madrid
+    https://github.com/ggfhf/
 
-   Licence: GNU General Public Licence Version 3
+Licence: GNU General Public Licence Version 3
 '''
 
 #-------------------------------------------------------------------------------
 
-'''This source contains the general functions and classes used by other programs
-   of the ddRADseqTools software package.
+'''
+This source contains the general functions and classes used by other programs
+of the ddRADseqTools software package.
 '''
 #-------------------------------------------------------------------------------
 
@@ -32,7 +34,9 @@ import numpy as np
 #-------------------------------------------------------------------------------
     
 def get_project_name():
-    '''Get the project name.'''
+    '''
+    Get the project name.
+    '''
 
     # assign the project name
     project_name = 'ddRADseqTools'
@@ -43,10 +47,12 @@ def get_project_name():
 #-------------------------------------------------------------------------------
 
 def get_project_version():
-    '''Get the project name.'''
+    '''
+    Get the project name.
+    '''
 
     # assign the project version
-    project_version = '0.43'
+    project_version = '0.44'
 
     # return the project name:
     return project_version
@@ -54,7 +60,9 @@ def get_project_version():
 #-------------------------------------------------------------------------------
 
 def get_directory(path):
-    '''Get the directory of a complete path.'''
+    '''
+    Get the directory of a complete path.
+    '''
 
     # assign directory of a complete path
     directory = os.path.dirname(path) + '/'
@@ -65,7 +73,9 @@ def get_directory(path):
 #-------------------------------------------------------------------------------
 
 def get_file_name(path):
-    '''Get the file name with extension of a complete path.'''
+    '''
+    Get the file name with extension of a complete path.
+    '''
 
     # assign the file name of a complete path
     file_name = os.path.basename(path)
@@ -76,7 +86,9 @@ def get_file_name(path):
 #-------------------------------------------------------------------------------
 
 def get_file_name_noext(path):
-    '''Get the file name without extension of a complete path.'''
+    '''
+    Get the file name without extension of a complete path.
+    '''
 
     # assign the complete file name of a complete path
     file_name = os.path.basename(path)
@@ -90,7 +102,9 @@ def get_file_name_noext(path):
 #-------------------------------------------------------------------------------
 
 def change_extension(path, new_extension):
-    '''Change the file extension.'''
+    '''
+    Change the file extension.
+    '''
 
     # get the path included file name without extension
     i = path.rfind('.')
@@ -105,7 +119,9 @@ def change_extension(path, new_extension):
 #-------------------------------------------------------------------------------
 
 def get_config_file(path):
-    '''Get the configuration file.'''
+    '''
+    Get the configuration file.
+    '''
 
     # build the config file
     program_name = os.path.splitext(path)[0]
@@ -117,10 +133,11 @@ def get_config_file(path):
 #-------------------------------------------------------------------------------
 
 def get_ressites(rsfile, enzyme1, enzyme2):
-    '''Get the restriction sites sequences. The variables enzyme1 and enzyme2 can
-       hold a valid nucleotides sequence corresponding to the restriction sites
-       sequence of an enzyme or an enzyme identifier. In last case, the restriction
-       site sequence is searched in rsfile.
+    '''
+    Get the restriction site sequences. The variables enzyme1 and enzyme2 can
+    hold a valid nucleotides sequence corresponding to the restriction sites
+    sequence of an enzyme or an enzyme identifier. In last case, the restriction
+    site sequence is searched in rsfile.
     '''
 
     # initialize the control variables
@@ -128,7 +145,7 @@ def get_ressites(rsfile, enzyme1, enzyme2):
     enzyme2_found = False
 
     # if enzyme1 has a valid nucleotides sequence
-    if is_valid_sequence(enzyme1, ['*']):
+    if is_valid_sequence(enzyme1, allowed_ambiguity_codes=True, other_allowed_characters_list=[], cut_tag_check=True):
         ressite1_seq = enzyme1
         enzyme1_found = True
 
@@ -162,7 +179,7 @@ def get_ressites(rsfile, enzyme1, enzyme2):
                     raise ProgramError('D102', record.strip('\n'), rsfile)
 
                 # verify that the data are correct
-                if not is_valid_sequence(restriction_site_seq, cut_tag_check=True):
+                if not is_valid_sequence(restriction_site_seq, allowed_ambiguity_codes=True, other_allowed_characters_list=[], cut_tag_check=True):
                     raise ProgramError('D103', restriction_site_seq, rsfile)
 
                 # assign the data
@@ -177,7 +194,7 @@ def get_ressites(rsfile, enzyme1, enzyme2):
         rsfile_id.close()
 
     # if enzyme2 has a valid nucleotides sequence
-    if is_valid_sequence(enzyme2, cut_tag_check=True):
+    if is_valid_sequence(enzyme2, allowed_ambiguity_codes=True, other_allowed_characters_list=[], cut_tag_check=True):
         ressite2_seq = enzyme2
         enzyme2_found = True
 
@@ -211,7 +228,7 @@ def get_ressites(rsfile, enzyme1, enzyme2):
                     raise ProgramError('D102', record.strip('\n'), rsfile)
 
                 # verify that the data are correct
-                if not is_valid_sequence(restriction_site_seq, cut_tag_check=True):
+                if not is_valid_sequence(restriction_site_seq, allowed_ambiguity_codes=True, other_allowed_characters_list=[], cut_tag_check=True):
                     raise ProgramError('D103', restriction_site_seq, rsfile)
 
                 # assign the data
@@ -259,8 +276,10 @@ def get_ressites(rsfile, enzyme1, enzyme2):
 #-------------------------------------------------------------------------------
 
 def get_symbols():
-    '''Get the symbol of the indexes and the DBR
-       (DBR) to indentify the PCR duplicates in the end.'''
+    '''
+    Get the symbol of the indexes and the DBR to indentify the PCR duplicates
+    in the end.
+    '''
 
     # assing symbols
     index1_symbol = '1'
@@ -273,8 +292,9 @@ def get_symbols():
 #-------------------------------------------------------------------------------
 
 def get_ends(endsfile, wend, cend, technique, index1len, index1_symbol, index2len, index2_symbol, dbrlen, dbr_symbol):
-    '''Get the end sequences. The variables wend and cend hold end codes of the
-       wantson and crick strand. The sequences are searched in endsfile.
+    '''
+    Get the end sequences. The variables wend and cend hold end codes of the
+    Wantson and Crick strand. The sequences are searched in endsfile.
     '''
 
     # initialize the control variables
@@ -308,7 +328,7 @@ def get_ends(endsfile, wend, cend, technique, index1len, index1_symbol, index2le
                 raise ProgramError('D102', record.strip('\n'), endsfile)
 
             # verify that the data are correct
-            if not is_valid_sequence(end_seq, ['1', '2', '3']):
+            if not is_valid_sequence(end_seq, allowed_ambiguity_codes=False, other_allowed_characters_list=['1', '2', '3'], cut_tag_check=False):
                 raise ProgramError('D103', end_seq, endsfile)
 
             # assign the data
@@ -383,7 +403,9 @@ def get_ends(endsfile, wend, cend, technique, index1len, index1_symbol, index2le
 #-------------------------------------------------------------------------------
 
 def get_individuals(individualsfile, technique):
-    '''Get the indviduals data from individualsfile.'''
+    '''
+    Get the indviduals data from individualsfile.
+    '''
 
     # initialize the individuals dictionary
     individuals_dict = {}
@@ -419,12 +441,12 @@ def get_individuals(individualsfile, technique):
 
             # verify that indexes data are correct
             if technique in ['IND1', 'IND1_DBR'] and index2_seq != '':
-                raise('L004', 'index2', technique, individualsfile)
+                raise ProgramError('L004', 'index2', technique, individualsfile)
             if technique in ['IND1_IND2', 'IND1_IND2_DBR'] and index2_seq == '':
-                raise('L005', 'index2', technique, individualsfile)
-            if not is_valid_sequence(index1_seq):
+                raise ProgramError('L005', 'index2', technique, individualsfile)
+            if not is_valid_sequence(index1_seq, allowed_ambiguity_codes=False, other_allowed_characters_list=[], cut_tag_check=False):
                 raise ProgramError('D103', index1_seq, individualsfile)
-            if not is_valid_sequence(index2_seq):
+            if not is_valid_sequence(index2_seq, allowed_ambiguity_codes=False, other_allowed_characters_list=[], cut_tag_check=False):
                 raise ProgramError('D103', index2_seq, individualsfile)
 
             # add data to the dictionary
@@ -452,9 +474,9 @@ def get_individuals(individualsfile, technique):
                         replicated_individual_id_found = True
                         break
                     else:
-                        raise ProgramError('L007', replicated_individual_id, individualsfile)
+                        raise ProgramError('L008', replicated_individual_id, individualsfile)
             if not replicated_individual_id_found:
-                raise ProgramError('L006', replicated_individual_id, individualsfile)
+                raise ProgramError('L007', replicated_individual_id, individualsfile)
 
     # return the individuals dictionary
     return individuals_dict
@@ -462,7 +484,9 @@ def get_individuals(individualsfile, technique):
 #-------------------------------------------------------------------------------
 
 def get_individual_keys(individuals_dict):
-    '''Get the indvidual keys from individuals dictionary.'''
+    '''
+    Get the indvidual keys from individuals dictionary.
+    '''
 
     # initialize the individual keys list
     individual_keys_list = []
@@ -477,7 +501,9 @@ def get_individual_keys(individuals_dict):
 #-------------------------------------------------------------------------------
 
 def get_fragments_list(fragsfile):
-    '''Get the fragments from fragsfile and sort them randomly.'''
+    '''
+    Get the fragments from fragsfile and sort them randomly.
+    '''
 
     # initialize the fragments list
     fragments_list = []
@@ -542,16 +568,123 @@ def get_fragments_list(fragsfile):
 
 #-------------------------------------------------------------------------------
 
-def is_valid_sequence(seq, other_allowed_characters_list=[], cut_tag_check=False):
-    '''Verify if seq have a valid nucleotides sequence. In addition to standard
-       codes, others allowed characters can be passed.
+def get_nucleotide_dict():
+    '''
+    Get a dictionary with nucleotide data.
+    '''
+
+    # +----+------------------+------------------+-------------+
+    # |Code|   Description    |   Translation    |Complementary|
+    # +----+------------------+------------------+-------------+
+    # | A  |Adenine           |A                 |     T/U     |
+    # +----+------------------+------------------+-------------+
+    # | C  |Cytosine          |C                 |      G      |
+    # +----+------------------+------------------+-------------+
+    # | G  |Guanine           |G                 |      C      |
+    # +----+------------------+------------------+-------------+
+    # | T  |Thymine           |T                 |      A      |
+    # +----+------------------+------------------+-------------+
+    # | U  |Uracil            |U                 |      A      |
+    # +----+------------------+------------------+-------------+
+    # | R  |puRine            |A or G            |      Y      |
+    # +----+------------------+------------------+-------------+
+    # | Y  |pYrimidine        |C or T/U          |      R      |
+    # +----+------------------+------------------+-------------+
+    # | S  |Strong interaction|C or G            |      S      |
+    # +----+------------------+------------------+-------------+
+    # | W  |Weak interaction  |A or T/U          |      W      |
+    # +----+------------------+------------------+-------------+
+    # | K  |Keto group        |G or T/U          |      M      |
+    # +----+------------------+------------------+-------------+
+    # | M  |aMino group       |A or C            |      K      |
+    # +----+------------------+------------------+-------------+
+    # | B  |not A             |C or G or T/U     |      V      |
+    # +----+------------------+------------------+-------------+
+    # | V  |not T             |A or C or G       |      B      |
+    # +----+------------------+------------------+-------------+
+    # | D  |not C             |A or G or T/U     |      H      |
+    # +----+------------------+------------------+-------------+
+    # | H  |not G             |A or C or T/U     |      D      |
+    # +----+------------------+------------------+-------------+
+    # | N  |aNy               |A or C or G or T/U|      N      |
+    # +----+------------------+------------------+-------------+
+
+    # build the nucleotide dictonary
+    nucleotide_dict = {
+        'A':{'code': 'A', 'nuclotide_list':['A'], 'complementary_code':'T', 'complementary_nuclotide_list':['T']},
+        'a':{'code': 'a', 'nuclotide_list':['a'], 'complementary_code':'t', 'complementary_nuclotide_list':['t']},
+        'C':{'code': 'C', 'nuclotide_list':['C'], 'complementary_code':'G', 'complementary_nuclotide_list':['G']},
+        'c':{'code': 'c', 'nuclotide_list':['c'], 'complementary_code':'g', 'complementary_nuclotide_list':['g']},
+        'G':{'code': 'G', 'nuclotide_list':['G'], 'complementary_code':'C', 'complementary_nuclotide_list':['C']},
+        'g':{'code': 'g', 'nuclotide_list':['g'], 'complementary_code':'c', 'complementary_nuclotide_list':['c']},
+        'T':{'code': 'T', 'nuclotide_list':['T'], 'complementary_code':'A', 'complementary_nuclotide_list':['A']},
+        't':{'code': 't', 'nuclotide_list':['t'], 'complementary_code':'a', 'complementary_nuclotide_list':['a']},
+        'R':{'code': 'R', 'nuclotide_list':['A','G'], 'complementary_code':'Y', 'complementary_nuclotide_list':['C','T']},
+        'r':{'code': 'r', 'nuclotide_list':['a','g'], 'complementary_code':'y', 'complementary_nuclotide_list':['c','t']},
+        'Y':{'code': 'Y', 'nuclotide_list':['C','T'], 'complementary_code':'R', 'complementary_nuclotide_list':['A','G']},
+        'y':{'code': 'y', 'nuclotide_list':['c','t'], 'complementary_code':'r', 'complementary_nuclotide_list':['a','g']},
+        'S':{'code': 'S', 'nuclotide_list':['C','G'], 'complementary_code':'S', 'complementary_nuclotide_list':['C','G']},
+        's':{'code': 's', 'nuclotide_list':['c','G'], 'complementary_code':'s', 'complementary_nuclotide_list':['c','g']},
+        'W':{'code': 'W', 'nuclotide_list':['A','T'], 'complementary_code':'W', 'complementary_nuclotide_list':['A','T']},
+        'w':{'code': 'w', 'nuclotide_list':['a','t'], 'complementary_code':'w', 'complementary_nuclotide_list':['a','t']},
+        'K':{'code': 'K', 'nuclotide_list':['G','T'], 'complementary_code':'M', 'complementary_nuclotide_list':['A','C']},
+        'k':{'code': 'k', 'nuclotide_list':['g','t'], 'complementary_code':'m', 'complementary_nuclotide_list':['a','c']},
+        'M':{'code': 'M', 'nuclotide_list':['A','C'], 'complementary_code':'K', 'complementary_nuclotide_list':['G','T']},
+        'm':{'code': 'm', 'nuclotide_list':['a','c'], 'complementary_code':'k', 'complementary_nuclotide_list':['g','t']},
+        'B':{'code': 'B', 'nuclotide_list':['C','G','T'], 'complementary_code':'V', 'complementary_nuclotide_list':['A','C','G']},
+        'b':{'code': 'b', 'nuclotide_list':['c','G','T'], 'complementary_code':'v', 'complementary_nuclotide_list':['a','c','g']},
+        'V':{'code': 'V', 'nuclotide_list':['A','C','G'], 'complementary_code':'B', 'complementary_nuclotide_list':['C','G','T']},
+        'v':{'code': 'v', 'nuclotide_list':['a','c','g'], 'complementary_code':'b', 'complementary_nuclotide_list':['c','g','t']},
+        'D':{'code': 'D', 'nuclotide_list':['A','G','T'], 'complementary_code':'H', 'complementary_nuclotide_list':['A','C','T']},
+        'd':{'code': 'd', 'nuclotide_list':['a','g','t'], 'complementary_code':'h', 'complementary_nuclotide_list':['a','c','t']},
+        'H':{'code': 'H', 'nuclotide_list':['A','C','T'], 'complementary_code':'D', 'complementary_nuclotide_list':['A','G','T']},
+        'h':{'code': 'h', 'nuclotide_list':['a','C','t'], 'complementary_code':'d', 'complementary_nuclotide_list':['a','g','t']},
+        'N':{'code': 'N', 'nuclotide_list':['A','C','G','T'], 'complementary_code':'N', 'complementary_nuclotide_list':['A','C','G','T']},
+        'n':{'code': 'n', 'nuclotide_list':['a','c','g','t'], 'complementary_code':'n', 'complementary_nuclotide_list':['a','c','g','t']}
+        }
+    
+    # return the nucleotide dictionary
+    return nucleotide_dict
+
+#-------------------------------------------------------------------------------
+
+def get_nucleotide_list(allowed_ambiguity_codes, allowed_lowercase_code):
+    '''
+    Get a list with the nucleotide codes.
+    '''
+
+    # initialize the nucleotide list
+    nucleotide_list = []
+
+    # get the nucleotide dictonary
+    nucleotide_dict = get_nucleotide_dict()
+
+    # build the nucleotide list
+    for code in nucleotide_dict.keys():
+        lenght = len(nucleotide_dict[code]['nuclotide_list'])
+        if (not allowed_ambiguity_codes and lenght == 1 or allowed_ambiguity_codes) and (code.isupper() or code.islower() and allowed_lowercase_code):
+            nucleotide_list.append(code)
+
+    # sort the nucleotide_list
+    if nucleotide_list != []:
+        nucleotide_list.sort()
+
+    # return the nucleotide list
+    return nucleotide_list
+
+#-------------------------------------------------------------------------------
+
+def is_valid_sequence(seq, allowed_ambiguity_codes, other_allowed_characters_list, cut_tag_check):
+    '''
+    Verify if seq have a valid nucleotides sequence. In addition to standard
+    codes, others allowed characters can be passed.
     '''
 
     # initialize the control variable
     OK = True
 
-    # set valid nucleotide list
-    nucleotide_list = ['A', 'a', 'T', 't', 'C', 'c', 'G', 'g']
+    # get nucleotide list
+    nucleotide_list = get_nucleotide_list(allowed_ambiguity_codes, allowed_lowercase_code=True)
 
     # set cut tag and cut tag count
     cut_tag = '*'
@@ -560,13 +693,13 @@ def is_valid_sequence(seq, other_allowed_characters_list=[], cut_tag_check=False
     # verify each nucleotide of the sequence
     for i in range(len(seq)):
         if cut_tag_check:
-           if seq[i] not in nucleotide_list and seq[i] != cut_tag and seq[i] not in other_allowed_characters_list:
+            if seq[i] not in nucleotide_list and seq[i] != cut_tag and seq[i] not in other_allowed_characters_list:
                 OK = False
                 break
-           if seq[i] == cut_tag:
+            if seq[i] == cut_tag:
                 cut_tag_count += 1
         else:
-           if seq[i] not in nucleotide_list and seq[i] not in other_allowed_characters_list:
+            if seq[i] not in nucleotide_list and seq[i] not in other_allowed_characters_list:
                 OK = False
                 break
 
@@ -580,48 +713,141 @@ def is_valid_sequence(seq, other_allowed_characters_list=[], cut_tag_check=False
 
 #-------------------------------------------------------------------------------
 
-def get_reversed_complementary_sequence(seq):
-    '''Get the reversed complementary sequence of seq.
-       The efficient string concatenation in Python is studied in
-       https://www.waymoot.org/home/python_string/ and the performance of several
-       methods are shown.
-       This functions use the method 6.
+def get_complementary_sequence(seq):
+    '''
+    Get the complementary sequence of seq.
+    '''
+
+    # get the nucleotide dictionary
+    nucleotide_dict =  get_nucleotide_dict()
+
+    # convert the sequence to a list
+    seq_list = list(seq)
+
+    # get the list changing each nucleotide by its complementary nucleotide
+    complementary_seq_list = [nucleotide_dict[nucleotide]['complementary_code'] for nucleotide in seq_list]
+
+    # get a string from the complementary list 
+    complementary_seq = ''.join(complementary_seq_list)
+
+    # return the complementary sequence
+    return complementary_seq
+
+#-------------------------------------------------------------------------------
+
+def get_reverse_sequence(seq):
+    '''
+    Get the reverse sequence of seq.
     '''
 
     # convert the sequence to a list and reverse the elements of the list
     seq_list = list(seq)
     seq_list.reverse()
 
-    # get the reversed list changing each nucleotide by its complementary nucleotide
-    # IUPAC codes:
-    #    R: A or G      complementary: Y
-    #    Y: C or T            "      : R
-    #    S: G or C            "      : S
-    #    W: A or T            "      : W
-    #    K: G or T            "      : M
-    #    M: A or C            "      : K
-    #    B: C or G or T       "      : V
-    #    V: A or C or G       "      : B
-    #    D: A or G or T       "      : H
-    #    H: A or C or T       "      : D
-    #    N: any nucleotide    "      : N
-    #    X: any nucleotide    "      : X
-    compl_nts_dict = {'A':'T', 'a':'t', 'T':'A', 't':'a', 'C':'G', 'c':'g', 'G':'C', 'g':'c',
-                      'R':'Y', 'r':'y', 'Y':'R', 'y':'r', 'S':'S', 's':'s', 'W':'W', 'w':'w',
-                      'K':'M', 'k':'m', 'M':'K', 'm':'k', 'B':'V', 'b':'v', 'V':'B', 'v':'b',
-                      'D':'H', 'd':'h', 'H':'D', 'h':'d', 'N':'N', 'n':'n', 'X':'X', 'x':'x'}
-    revcompl_seq_list = [compl_nts_dict[nucleotide] for nucleotide in seq_list]
+    # get a string from the reverse list 
+    reverse_seq = ''.join(seq_list)
 
-    # get a string from the reversed complementary list 
+    # return the reverse complementary sequence
+    return reverse_seq
+
+#-------------------------------------------------------------------------------
+
+def get_reverse_complementary_sequence(seq):
+    '''
+    Get the reverse complementary sequence of seq.
+    '''
+
+    # get the nucleotide dictionary
+    nucleotide_dict =  get_nucleotide_dict()
+
+    # convert the sequence to a list and reverse the elements of the list
+    seq_list = list(seq)
+    seq_list.reverse()
+
+    # get the reverse list changing each nucleotide by its complementary nucleotide
+    revcompl_seq_list = [nucleotide_dict[nucleotide]['complementary_code'] for nucleotide in seq_list]
+
+    # get a string from the reverse complementary list 
     revcompl_seq = ''.join(revcompl_seq_list)
 
-    # return the reversed complementary sequence
+    # return the reverse complementary sequence
     return revcompl_seq
 
 #-------------------------------------------------------------------------------
 
+def get_unambiguous_sequence_list(seq):
+    '''
+    Get the list of unambiguous sequences from a sequence with ambiguous nucleotides.
+    '''
+
+    # get the nucleotide dictionary
+    nucleotide_dict =  get_nucleotide_dict()
+
+    # if there is not any nucleotide in the sequence 
+    if seq == '':
+        unambiguous_sequence_list = ['']
+
+    # if there are nucleotidea in the sequence 
+    else:
+
+        # initialize unambiguous sequence list
+        unambiguous_sequence_list = []
+
+        # get the nucleotide list corresponding with the code of the first nucleotide
+        nucleotide_list = nucleotide_dict[seq[0]]['nuclotide_list']
+
+        # get the list of unambiguous sequences of the sequence except the first nuclotide
+        split_seq_list = get_unambiguous_sequence_list(seq[1:])
+    
+        # build the unambiguous sequence list
+        for nucleotide in nucleotide_list:
+            for split_seq in split_seq_list:
+                 unambiguous_sequence_list.append('{0}{1}'.format(nucleotide, split_seq))
+
+    # return the unambiguous sequence list
+    return unambiguous_sequence_list
+
+#-------------------------------------------------------------------------------
+
+def get_sequence_with_mismakes_list(seq, admitted_mismatches):
+    '''
+    Get the list of sequences corresponding to a sequence with mismatches.
+    '''
+
+    # get the nucleotide list
+    nucleotide_list =  get_nucleotide_list(allowed_ambiguity_codes=False, allowed_lowercase_code=False)
+
+    # if there is not any mismatch
+    if admitted_mismatches == 0:
+        sequence_with_mismakes_list = [seq]
+
+    # if there are nucleotidea in the sequence 
+    else:
+
+        # initialize unambiguous sequence list
+        sequence_with_mismakes_list = []
+
+        seq_list = []
+        for i in range(len(seq)):
+            for j in range(len(nucleotide_list)):
+                seq_list.append('{0}{1}{2}'.format(seq[:i], nucleotide_list[j], seq[i+1:]))
+
+        total_seq_list = []
+        for i in range(len(seq_list)):
+            total_seq_list += get_sequence_with_mismakes_list(seq_list[i], admitted_mismatches - 1)
+
+        # remove duplicate sequences
+        sequence_with_mismakes_list = list(set(total_seq_list))
+
+    # return the list of sequences corresponding to a sequence with mismatches
+    return sequence_with_mismakes_list
+
+#-------------------------------------------------------------------------------
+
 def remove_cutmark(ressite_seq):
-    '''Remove the cut mark '*' of the restriction site.'''
+    '''
+    Remove the cut mark '*' of the restriction site.
+    '''
 
     # initialize the cleared restriction site sequence
     cleared_ressite_seq = ''
@@ -637,7 +863,9 @@ def remove_cutmark(ressite_seq):
 #-------------------------------------------------------------------------------
 
 def remove_nucleotides(seq, nucleotides):
-    '''Remove a nucleotides set of a sequence.'''
+    '''
+    Remove a nucleotides set of a sequence.
+    '''
 
     # calculate the length of the nucleotides
     length = len(nucleotides)
@@ -655,7 +883,9 @@ def remove_nucleotides(seq, nucleotides):
 #-------------------------------------------------------------------------------
 
 def remove_nucleotides_from_seq_to_end(seq, nucleotides, sense):
-    '''Remove nucleotides into a nucleotides set from a sequence to a end.'''
+    '''
+    Remove nucleotides into a nucleotides set from a sequence to a end.
+    '''
 
     # calculate the length of the nucleotides
     length = len(nucleotides)
@@ -677,7 +907,9 @@ def remove_nucleotides_from_seq_to_end(seq, nucleotides, sense):
 #-------------------------------------------------------------------------------
 
 def get_GC_N_data(seq):
-    '''Get the GC rate and the count of nucleotide codes no standard.'''
+    '''
+    Get the GC rate and the count of nucleotide codes no standard.
+    '''
 
     # initialize the GC, GCAT  and N counts
     GC_count = 0
@@ -714,7 +946,9 @@ def get_GC_N_data(seq):
 #-------------------------------------------------------------------------------
 
 def generate_sequence(length):
-    '''Generate randomly a nucleotides sequence with the length passed.'''
+    '''
+    Generate randomly a nucleotides sequence with the length passed.
+    '''
 
     # the four nucleotides
     nts_list = ['A', 'T', 'C', 'G']
@@ -732,34 +966,96 @@ def generate_sequence(length):
 
 #-------------------------------------------------------------------------------
 
-def build_random_sequence(length, ressite1_seq, ressite1_rcut_seq, ressite2_seq, ressite2_lcut_seq):
-    '''Build randomly a nucleotides sequence with the length passed verifing the
-       restriction sites are not included.
+def build_random_sequence(length, unambiguous_ressite1_seq_list, unambiguous_ressite2_seq_list):
+    '''
+    Build randomly a nucleotides sequence with the length passed verifing the
+    restriction sites are not included.
     '''
 
-    # generate a sequence without restriction sites sequences
-    while True:
+    # initialice the control variable
+    is_seq_found = True
+
+    # generate a sequence without restriction site sequences
+    while is_seq_found:
 
         # generate random sequence
         random_seq = generate_sequence(length)
+        is_seq_found = False
 
-        # if both restriction sites sequences are not found, break the loop
-        if random_seq.upper().find(ressite1_seq.upper()) == -1 and random_seq.upper().find(ressite2_seq.upper()) == -1:
-            break
-
-    # build the fragmente sequence
-    fragment_seq = ressite1_rcut_seq + random_seq + ressite2_lcut_seq
+        # if both restriction site sequences are not found, set the control variable to False
+        try:
+            for ressite1_seq in unambiguous_ressite1_seq_list:
+                if random_seq.upper().find(ressite1_seq.upper()) != -1:
+                    raise BreakLoops
+            for ressite2_seq in unambiguous_ressite2_seq_list:
+                if random_seq.upper().find(ressite2_seq.upper()) != -1:
+                    raise BreakLoops
+        except:
+            is_seq_found = True
 
     # return the sequence
-    return fragment_seq
+    return random_seq
 
 #-------------------------------------------------------------------------------
 
-def mutate_sequence(seq, indelprob, maxindelsize, locusmaxmut, min_seq_len, ressite1_seq, ressite2_seq):
-    '''Mutate the sequence of one nucleotide or do a indel depending on the indel
-       probability with a indel. The mutated sequence has not the nuclotides
-       of the restriction sites. 
-       This function has been reviewed in the version 0.41    '''
+def merge_sequence(long_seq, replacing_seq, short_seq):
+    '''
+    Merge a sequence of few nucleotides in a certain position of a longer
+    sequence.
+    '''
+
+    # verify the length of short_seq is equeal to length of replacing_seq
+    if len(short_seq) != len(replacing_seq):
+        raise ProgramError('L001', short_seq, replacing_seq)
+
+    # find replacing_seq in long_seq
+    position = long_seq.find(replacing_seq)
+    if position < 0:
+        raise ProgramError('L002', replacing_seq, long_seq)
+
+    # bind the merged sequence
+    merged_seq = long_seq[0:position] + short_seq + long_seq[position+len(short_seq):len(long_seq)]
+
+    # return the merged sequence
+    return merged_seq
+
+#-------------------------------------------------------------------------------
+
+def match_sequences(seq1, seq2, admitted_mismatches):
+    '''
+    Verify that two sequences are matched.
+    '''
+
+    # calculate the length of the two sequences and verify that they are equeal
+    seq1_len = len(seq1)
+    seq2_len = len(seq2)
+    if seq1_len != seq2_len:
+        raise ProgramError('L002', seq1, seq2)
+
+    # calculate the mismatches and get the control sequence
+    mismatches = 0
+    control_seq = ''
+    for i in range(len(seq1)):
+        if seq1[i] == seq2[i]:
+            control_seq += '1'
+        else:
+            mismatches += 1
+            control_seq += '0'
+
+    # verify the match
+    are_matched = True if mismatches <= admitted_mismatches else False
+
+    # return if the sequences are matches and the control sequence
+    return (are_matched, control_seq)
+
+#-------------------------------------------------------------------------------
+
+def mutate_sequence(seq, indelprob, maxindelsize, locusmaxmut, min_seq_len, unambiguous_ressite1_seq_list, unambiguous_ressite2_seq_list):
+    '''
+    Mutate the sequence of one nucleotide or do a indel depending on the indel
+    probability with a indel. The mutated sequence has not the nuclotides
+    of the restriction sites. 
+    '''
 
     # get the mutations number of the sequence
     seq_mutations_number_list = []
@@ -805,7 +1101,7 @@ def mutate_sequence(seq, indelprob, maxindelsize, locusmaxmut, min_seq_len, ress
                     j = random.randrange(0, length)
 
                     # get the insertion sequence
-                    insertion_seq = build_random_sequence(indelsize, ressite1_seq, '', ressite2_seq, '').lower()
+                    insertion_seq = build_random_sequence(indelsize, unambiguous_ressite1_seq_list, unambiguous_ressite2_seq_list).lower()
 
                     # build the new sequence
                     new_seq = old_seq[:j] + insertion_seq + old_seq[j:]
@@ -844,7 +1140,14 @@ def mutate_sequence(seq, indelprob, maxindelsize, locusmaxmut, min_seq_len, ress
             old_seq = new_seq
 
         # if some restriction site sequence is found, the sequence is not OK
-        if new_seq.upper().find(ressite1_seq.upper()) >= 0 or new_seq.upper().find(ressite2_seq.upper()) >= 0:
+        try:
+            for ressite1_seq in unambiguous_ressite1_seq_list:
+                if new_seq.upper().find(ressite1_seq.upper()) != -1:
+                    raise BreakLoops
+            for ressite2_seq in unambiguous_ressite2_seq_list:
+                if new_seq.upper().find(ressite2_seq.upper()) != -1:
+                    raise BreakLoops
+        except:
             new_seq = ''
             Message.print('trace', 'some restriction site sequence is found')
 
@@ -859,57 +1162,10 @@ def mutate_sequence(seq, indelprob, maxindelsize, locusmaxmut, min_seq_len, ress
 
 #-------------------------------------------------------------------------------
 
-def merge_sequence(long_seq, replacing_seq, short_seq):
-    '''Merge a sequence of few nucleotides in a certain position of a longer
-       sequence.
-    '''
-
-    # verify the length of short_seq is equeal to length of replacing_seq
-    if len(short_seq) != len(replacing_seq):
-        raise ProgramError('L001', short_seq, replacing_seq)
-
-    # find replacing_seq in long_seq
-    position = long_seq.find(replacing_seq)
-    if position < 0:
-        raise ProgramError('L002', replacing_seq, long_seq)
-
-    # bind the merged sequence
-    merged_seq = long_seq[0:position] + short_seq + long_seq[position+len(short_seq):len(long_seq)]
-
-    # return the merged sequence
-    return merged_seq
-
-#-------------------------------------------------------------------------------
-
-def match_sequences(seq1, seq2, admitted_mismatches):
-    '''Verify that two sequences are matched.'''
-
-    # calculate the length of the two sequences and verify that they are equeal
-    seq1_len = len(seq1)
-    seq2_len = len(seq2)
-    if seq1_len != seq2_len:
-        raise ProgramError('L002', seq1, seq2)
-
-    # calculate the mismatches and get the control sequence
-    mismatches = 0
-    control_seq = ''
-    for i in range(len(seq1)):
-        if seq1[i] == seq2[i]:
-            control_seq += '1'
-        else:
-            mismatches += 1
-            control_seq += '0'
-
-    # verify the match
-    are_matched = True if mismatches <= admitted_mismatches else False
-
-    # return if the sequences are matches and the control sequence
-    return (are_matched, control_seq)
-
-#-------------------------------------------------------------------------------
-
 def generate_quality(qltylen):
-    '''Ganerate a quality sequence.'''
+    '''
+    Generate a quality sequence.
+    '''
 
     # generate a quality sequence
     quality = 'E' * qltylen
@@ -920,8 +1176,9 @@ def generate_quality(qltylen):
 #-------------------------------------------------------------------------------
 
 def calculate_locus_reads_number(readsnum, minreadvar, maxreadvar, locinum):
-    '''Calculate randomly the reads number of a locus depending on the total reads
-       number and the number of loci.
+    '''
+    Calculate randomly the reads number of a locus depending on the total reads
+    number and the number of loci.
     '''
 
     # calculate randomly the reads number
@@ -935,7 +1192,9 @@ def calculate_locus_reads_number(readsnum, minreadvar, maxreadvar, locinum):
 #-------------------------------------------------------------------------------
 
 def arethere_pcrdup(pcrdupprob, GC_rate, GC_distribution_list, gcfactor):
-    '''Determine if there are PCR duplicates.'''
+    '''
+    Determine if there are PCR duplicates.
+    '''
 
     # search the accumulated counts total rate
     gc_count_total_rate = 0
@@ -954,7 +1213,9 @@ def arethere_pcrdup(pcrdupprob, GC_rate, GC_distribution_list, gcfactor):
 #-------------------------------------------------------------------------------
 
 def calculate_pcrdup_num(pcrdup, pcrdistribution, multiparam ,poissonparam):
-    '''Calculate the PCR duplicates number.'''
+    '''
+    Calculate the PCR duplicates number.
+    '''
 
     # initialize the PCR duplicates number
     pcrdup_num = 0
@@ -976,7 +1237,9 @@ def calculate_pcrdup_num(pcrdup, pcrdistribution, multiparam ,poissonparam):
 #-------------------------------------------------------------------------------
 
 def update_fragments_intervals(intervals_dict, fragstinterval, fragment_len, N_count):
-    '''Update the intervals with the fragment data.'''
+    '''
+    Update the intervals with the fragment data.
+    '''
 
     # calculate the interval identification
     start = ((fragment_len - 1)  // fragstinterval) * fragstinterval + 1
@@ -1003,7 +1266,9 @@ def update_fragments_intervals(intervals_dict, fragstinterval, fragment_len, N_c
 #-------------------------------------------------------------------------------
 
 def write_fragments_stats(fragstfile, intervals_dict, total_fragments_count, written_fragments_count, minfragsize, maxfragsize, title):
-    '''Write the statistics of the fragments gotten in the double digest.'''
+    '''
+    Write the statistics of the fragments gotten in the double digest.
+    '''
 
     # get a list with the sorted intervals
     intervals_list = []
@@ -1028,12 +1293,12 @@ def write_fragments_stats(fragstfile, intervals_dict, total_fragments_count, wri
     fragstfile_id.write('{0}\n'.format(title))
     fragstfile_id.write('{0}\n'.format('=' * len(title)))
     fragstfile_id.write('\n')
-    fragstfile_id.write('+-------------------+-------+-------+---------+\n')
-    fragstfile_id.write('| FRAGMENT INTERVAL | FRAGS |PERCENT|FRAGS W/N|\n')
-    fragstfile_id.write('+-------------------+-------+-------+---------+\n')
+    fragstfile_id.write('+-------------------+-------+-------+-------------+\n')
+    fragstfile_id.write('| FRAGMENT INTERVAL | FRAGS |PERCENT|FRAGS W/N (*)|\n')
+    fragstfile_id.write('+-------------------+-------+-------+-------------+\n')
 
     # write the heads in CSV file
-    csv_fragstfile_id.write('"FRAGMENT INTERVAL";"FRAGS";"PERCENT";"FRAGS W/N";\n')
+    csv_fragstfile_id.write('"FRAGMENT INTERVAL";"FRAGS";"PERCENT";"FRAGS WITH Ns";\n')
 
     # write the data of each interval
     pattern = r'(\d+)-(\d+)$'
@@ -1051,17 +1316,19 @@ def write_fragments_stats(fragstfile, intervals_dict, total_fragments_count, wri
         count_N = intervals_list[i][2]
 
         # write the data in the text file
-        fragstfile_id.write('|{0:>9d}-{1:<9d}|{2:>7d}|{3:>7.4f}|{4:>9d}|\n'.format(first_value, last_value, count, percentage, count_N))
-        fragstfile_id.write('+-------------------+-------+-------+---------+\n')
+        fragstfile_id.write('|{0:>9d}-{1:<9d}|{2:>7d}|{3:>7.4f}|{4:>13d}|\n'.format(first_value, last_value, count, percentage, count_N))
+        fragstfile_id.write('+-------------------+-------+-------+-------------+\n')
 
         # write the data in the CSV file
         csv_fragstfile_id.write('"{0:>9d}-{1:<9d}";{2};{3};{4};\n'.format(first_value, last_value, count, percentage, count_N))
          
     # write the counts of the total fragments and fragments written in the text data
-    fragstfile_id.write('|                   Total fragments |{0:>9d}|\n'.format(total_fragments_count))
-    fragstfile_id.write('+-----------------------------------+---------+\n')
+    fragstfile_id.write('|             Total |{0:>7d}|\n'.format(total_fragments_count))
+    fragstfile_id.write('+-------------------+-------+\n')
     fragstfile_id.write('\n')
-    fragstfile_id.write('{0} records have been written with fragment size between {1} and {2} nucleotides'.format(written_fragments_count, minfragsize, maxfragsize))
+    fragstfile_id.write('There are {0} fragments with size between {1} and {2} nucleotides'.format(written_fragments_count, minfragsize, maxfragsize))
+    fragstfile_id.write('\n')
+    fragstfile_id.write('(*) Number of fragments with Ns in their sequence')
 
     # close statistics files
     fragstfile_id.close()
@@ -1074,7 +1341,9 @@ def write_fragments_stats(fragstfile, intervals_dict, total_fragments_count, wri
 #-------------------------------------------------------------------------------
 
 def plot_fragments_graphic(fragstfile, intervals_dict, title):
-    ''' Plot a fragments distribution graphic and save it in a file.'''
+    '''
+    Plot a fragments distribution graphic and save it in a file.
+    '''
 
     # verify that the library numpy is installed
     try:
@@ -1139,7 +1408,9 @@ def plot_fragments_graphic(fragstfile, intervals_dict, title):
 #-------------------------------------------------------------------------------
 
 def write_pcrdup_stats(dupstfile, stats_dict):
-    '''Write the PCR duplicates statistics.'''
+    '''
+    Write the PCR duplicates statistics.
+    '''
 
     # open the text file of PCR duplicates statistics
     try:
@@ -1339,7 +1610,9 @@ def write_pcrdup_stats(dupstfile, stats_dict):
 #-------------------------------------------------------------------------------
 
 def calculate_loci_pcrdup_stats(stats_dict):
-    '''Calculate the PCR duplicates statistics of loci.'''
+    '''
+    Calculate the PCR duplicates statistics of loci.
+    '''
 
     # initialize the loci stats
     loci_stats_dict = {}
@@ -1370,7 +1643,9 @@ def calculate_loci_pcrdup_stats(stats_dict):
 #-------------------------------------------------------------------------------
 
 def plot_pcrdup_graphics(dupstfile, stats_dict):
-    ''' Plot a statistics graphics and save it in a file.'''
+    '''
+    Plot a statistics graphics and save it in a file.
+    '''
 
     # verify that data have been gotten in vitro or in silico
     invitro_count = stats_dict.get('invitro', 0)
@@ -1463,7 +1738,9 @@ def plot_pcrdup_graphics(dupstfile, stats_dict):
 #-------------------------------------------------------------------------------
 
 def calculate_individuals_withoutdata_distribution(stats_dict):
-    '''Calculate the distribution of the individuals without data per locus.'''
+    '''
+    Calculate the distribution of the individuals without data per locus.
+    '''
 
     # initialize the distribution of the individuals without data per locus
     individuals_withoutdata_distribution_dict = {}
@@ -1513,7 +1790,9 @@ def calculate_individuals_withoutdata_distribution(stats_dict):
 #-------------------------------------------------------------------------------
 
 def plot_individuals_withoutdata_graphic(dupstfile, stats_dict):
-    '''Plot the graphic of distribution of the individuals without data per locus and save it in a file.'''
+    '''
+    Plot the graphic of distribution of the individuals without data per locus and save it in a file.
+    '''
 
     # verify if data have been gotten in vitro or in silico
     invitro_count = stats_dict.get('invitro', 0)
@@ -1573,7 +1852,9 @@ def plot_individuals_withoutdata_graphic(dupstfile, stats_dict):
 #-------------------------------------------------------------------------------
 
 def calculate_loci_withoutdata_distribution(stats_dict):
-    '''Calculate the distribution of the loci without data per individual.'''
+    '''
+    Calculate the distribution of the loci without data per individual.
+    '''
 
     # initialize the distribution of the loci without data per individual
     loci_withoutdata_distribution_dict = {}
@@ -1623,7 +1904,9 @@ def calculate_loci_withoutdata_distribution(stats_dict):
 #-------------------------------------------------------------------------------
 
 def plot_loci_withoutdata_graphic(dupstfile, stats_dict):
-    '''Plot the graphic of the loci without data per individual and save it in a file.'''
+    '''
+    Plot the graphic of the loci without data per individual and save it in a file.
+    '''
 
     # verify if data have been gotten in vitro or in silico
     invitro_count = stats_dict.get('invitro', 0)
@@ -1683,7 +1966,9 @@ def plot_loci_withoutdata_graphic(dupstfile, stats_dict):
 #-------------------------------------------------------------------------------
 
 def write_GC_distribution(fragsfile, GC_distribution_dict):
-    '''Save the GC distribution in a file.'''
+    '''
+    Save the GC distribution in a file.
+    '''
 
     # get a list with the sorted GC distribution
     GC_distribution_list = []
@@ -1708,7 +1993,9 @@ def write_GC_distribution(fragsfile, GC_distribution_dict):
 #-------------------------------------------------------------------------------
 
 def get_GC_distribution(GC_distribution_file):
-    '''Get the GC distribution list'''
+    '''
+    Get the GC distribution list.
+    '''
 
     # initialize the GC distribution list
     GC_distribution_list = []
@@ -1766,6 +2053,8 @@ def get_GC_distribution(GC_distribution_file):
 #-------------------------------------------------------------------------------
 
 def get_float_list(float_list_string):
+    '''
+    '''
 
     # verify that the string ends with a comma
     if float_list_string[len(float_list_string) - 1] != ',':
@@ -1784,20 +2073,20 @@ def get_float_list(float_list_string):
             try:
                 float_list.append(float(value.strip()))
             except:
-                raise ProgramError('L008', float_list_string)
+                raise ProgramError('L009', float_list_string)
         i = j + 1
         j = float_list_string.find(',',i)
 
     # verify that the float list is not empty
     if float_list == []:
-        raise ProgramError('L008', float_list_string)
+        raise ProgramError('L009', float_list_string)
 
     # verify that the elements of the float list sum 1.0
     total = 0
     for i in range(len(float_list)):
         total += float_list[i]
     if total != 1.0:
-        raise ProgramError('L008', float_list_string)
+        raise ProgramError('L009', float_list_string)
 
     # return the float list
     return float_list
@@ -1805,24 +2094,28 @@ def get_float_list(float_list_string):
 #-------------------------------------------------------------------------------
 
 def get_all_options_dict():
+    '''
+    Get a dictionary with all options available in the software package.
+    '''
 
     # define all options dictionary
     all_options_dict = {
         'cend': {'value':'', 'default':'end02', 'comment':"code used in endsfile corresponding to the end where the adapter 2 is"},
-        'clearfile': {'value':'', 'default':'./results/reads-cleared', 'comment':'path of the output file with PCR duplicates removed without extension'},
+        'clearfile': {'value':'', 'default':'./results/reads-cleared', 'comment':'path of the file with PCR duplicates removed without extension'},
         'cut': {'value':'', 'default':'YES', 'comment':'YES (cut nucleotides from or until a seq into the read) or NO (change bases by Ns from or until a seq into the read)'},
-        'cutfile': {'value':'', 'default':'./results/reads-cut', 'comment':'path of the output file with cut reads from a sequence to 3\' end'},
+        'cutfile': {'value':'', 'default':'./results/reads-cut', 'comment':'path of the file with cut reads from a sequence to 3\' end'},
         'dbrlen': {'value':'', 'default':'4', 'comment':'DBR sequence length (it must be 0 when technique is IND1 or IND1_IND2)'},
         'dropout': {'value':'', 'default':'0.0', 'comment':'mutation probability in the enzyme recognition sites (0.0 <= dropout < 1.0)'},
         'dupstfile': {'value':'', 'default':'./results/pcrduplicates-stats.txt', 'comment':'path of the the PCR duplicates statistics file'},
         'endsfile': {'value':'', 'default':'./ends.txt', 'comment':'path oh the end selengthquences file'},
         'enzyme1': {'value':'', 'default':'EcoRI', 'comment':'id of 1st restriction enzyme used in rsfile or its restriction site sequence'},
         'enzyme2': {'value':'', 'default':'MseI', 'comment':'id of 2nd restriction enzyme used in rsfile or its restriction site sequence'},
+        'filenum': {'value':'', 'default':'1', 'comment':'1: in SE file or the first file in PE files; 2: the second file in PE files'},
         'format': {'value':'', 'default':'FASTQ', 'comment':'FASTA or FASTQ (format of fragments file)'},
         'fragsfile': {'value':'', 'default':'./results/fragments.fasta', 'comment':'path of the fragments file'},
         'fragsnum': {'value':'', 'default':'10000', 'comment':'fragments number'},
         'fragstinterval': {'value':'', 'default':'25', 'comment':'interval length of fragment size'},
-        'fragstfile': {'value':'', 'default':'./results/fragments-stats.txt', 'comment':'path of the output statistics file'},
+        'fragstfile': {'value':'', 'default':'./results/fragments-stats.txt', 'comment':'path of the fragment statistics file'},
         'gcfactor': {'value':'', 'default':'0.0', 'comment':'weight factor of GC ratio in a locus with PCR duplicates (0.0 <= gcfactor < 1.0)'},
         'genfile': {'value':'', 'default':'./genomes/genome.fasta', 'comment':'file of the reference genome in fasta format'},
         'gz': {'value':'', 'default':'NO', 'comment':'YES or NO (gzip format is used to compress the files)'},
@@ -1845,7 +2138,8 @@ def get_all_options_dict():
         'poissonparam': {'value':'', 'default':'1.0', 'comment':'lambda value of the Poisson distribution'},
         'pcrdupprob': {'value':'', 'default':'0.0', 'comment':'PCR duplicates probability in a locus (0.0 <= pcrdupprob < 1.0)'},
         'pcrdistribution': {'value':'', 'default':'MULTINOMIAL', 'comment':'distribution type to calculate the PCR duplicates number: MULTINOMIAL or POISSON'},
-        'readsfile': {'value':'', 'default':'./results/reads', 'comment':'path of the output file with generated sequences without extension'},
+        'readsfile': {'value':'', 'default':'./results/reads', 'comment':'path of the read file without extension'},
+        'input_readfile': {'value':'', 'default':'./results/reads-1.fastq', 'comment':'path of the read file'},
         'readsfile1': {'value':'', 'default':'./results/reads-1.fastq', 'comment':'path of the reads file in SE read type or the Watson strand reads file in PE case'},
         'readsfile2': {'value':'', 'default':'./results/reads-2.fastq', 'comment':'path of the Crick strand reads file in PE read type or NONE in SE case'},
         'readsnum': {'value':'', 'default':'10000', 'comment':'reads number'},
@@ -1855,7 +2149,7 @@ def get_all_options_dict():
         'seq': {'value':'', 'default':'TGGAGGTGGGG', 'comment':'sequence to be located'},
         'technique': {'value':'', 'default':'IND1_IND2_DBR', 'comment':'IND1 (only index1), IND1_DBR (index1 + DBR), IND1_IND2 (index1 + index2) or IND1_IND2_DBR (index1 + index2 + DBR)'},
         'trace': {'value':'', 'default':'NO', 'comment':'additional info useful to the developer team: YES or NO'},
-        'trimfile': {'value':'', 'default':'./results/reads-trimmed', 'comment':'path of the output file with trimmed reads without extension'},
+        'trimfile': {'value':'', 'default':'./results/reads-trimmed', 'comment':'path of the file with trimmed reads without extension'},
         'verbose': {'value':'', 'default':'YES', 'comment':'additional job status info during the run: YES or NO'},
         'wend': {'value':'', 'default':'end01', 'comment':"code used in endsfile corresponding to the end where the adapter 1 is"},
         }
@@ -1866,7 +2160,9 @@ def get_all_options_dict():
 #-------------------------------------------------------------------------------
 
 def get_options(options_dict, config_file, argv):
-    '''Get options from config file and the input parameters.'''
+    '''
+    Get options from config file and the input parameters.
+    '''
 
     # open config file
     try:
@@ -1902,7 +2198,9 @@ def get_options(options_dict, config_file, argv):
 #-------------------------------------------------------------------------------
 
 def parse_options(options_dict, param, origin):
-    '''Parse and extract a option from the config file or the input parameters.'''
+    '''
+    Parse and extract a option from the config file or the input parameters.
+    '''
 
     # parse cend
     if param.startswith('--cend=') or param.lstrip().startswith('cend='):
@@ -1965,6 +2263,13 @@ def parse_options(options_dict, param, origin):
     elif param.startswith('--enzyme2=') or param.lstrip().startswith('enzyme2='):
         enzyme2 = get_option_value(param, origin)
         options_dict['enzyme2']['value'] = enzyme2
+
+    # parse filenum
+    elif param.startswith('--filenum=') or param.lstrip().startswith('filenum='):
+        filenum = get_option_value(param, origin)
+        if filenum not in ['1', '2']:
+            raise ProgramError('D206', filenum)
+        options_dict['filenum']['value'] = filenum
 
     # parse fragsfile
     elif param.startswith('--fragsfile=') or param.lstrip().startswith('fragsfile='):
@@ -2035,11 +2340,6 @@ def parse_options(options_dict, param, origin):
             raise ProgramError('D005', 'indelprob', 0.0, 1.0)
         options_dict['indelprob']['value'] = indelprob
 
-    # parse individualsfile
-    elif param.startswith('--individualsfile=') or param.lstrip().startswith('individualsfile='):
-        individualsfile = get_option_value(param, origin)
-        options_dict['individualsfile']['value'] = individualsfile
-
     # parse index1len
     elif param.startswith('--index1len=') or param.lstrip().startswith('index1len='):
         try:
@@ -2059,6 +2359,16 @@ def parse_options(options_dict, param, origin):
         if index2len < 0 or index2len > 10:
             raise ProgramError('D002', 'index2len', 0, 10)
         options_dict['index2len']['value'] = index2len
+
+    # parse individualsfile
+    elif param.startswith('--individualsfile=') or param.lstrip().startswith('individualsfile='):
+        individualsfile = get_option_value(param, origin)
+        options_dict['individualsfile']['value'] = individualsfile
+
+    # parse input_readfile
+    elif param.startswith('--input_readfile=') or param.lstrip().startswith('input_readfile='):
+        input_readfile = get_option_value(param, origin)
+        options_dict['input_readfile']['value'] = input_readfile
 
     # parse insertlen
     elif param.startswith('--insertlen=') or param.lstrip().startswith('insertlen='):
@@ -2288,7 +2598,9 @@ def parse_options(options_dict, param, origin):
 #-------------------------------------------------------------------------------
 
 def get_option_value(param, origin):
-    '''Get the value of a option.'''
+    '''
+    Get the value of a option.
+    '''
 
     # remove the comment if it exists
     i = param.find('#')
@@ -2314,26 +2626,18 @@ def get_option_value(param, origin):
     return value
 
 #-------------------------------------------------------------------------------
-
-#def trace():
-#    '''Return if the traces must be printed.'''
-#
-#    # assign the value (True can be assigned if the traces are necessary)
-#    traces_printed = False
-#    # -- traces_printed = True
-#
-#    # return the value
-#    return traces_printed
-
-#-------------------------------------------------------------------------------
  
 class ProgramError(Exception):
-    '''This class controls various errors that can occur in the execution of the program.'''
+    '''
+    This class controls various errors that can occur in the execution of the program.
+    '''
 
    #---------------
 
     def __init__(self, code_exception, param1='', param2='', param3=''):
-        '''Initialize the object to manage a passed exception.''' 
+        '''
+        Initialize the object to manage a passed exception.
+        ''' 
 
         # manage the code of exception
         if code_exception == 'D001':
@@ -2364,6 +2668,8 @@ class ProgramError(Exception):
             Message.print('error', '*** ERROR {0}: read type {1} is wrong. It must be SE or PE.'.format(code_exception, param1))
         elif code_exception == 'D205':
             Message.print('error', '*** ERROR {0}: {1} is not a valid value in option {2}. It must be YES or NO.'.format(code_exception, param2, param1))
+        elif code_exception == 'D206':
+            Message.print('error', '*** ERROR {0}: file number {1} is wrong. It must be 1 or 2.'.format(code_exception, param1))
         elif code_exception == 'D301':
             Message.print('error', '*** ERROR {0}: Enzyme identification or restriction site sequence {1} is not valid.'.format(code_exception, param1))
         elif code_exception == 'D302':
@@ -2395,11 +2701,15 @@ class ProgramError(Exception):
         elif code_exception == 'L005':
             Message.print('error', "*** ERROR {0}: A {1} is required by the technique {2} in the file {3}.".format(code_exception, param1, param2, param3))
         elif code_exception == 'L006':
-            Message.print('error', "*** ERROR {0}: The identification of replicated individual {1} is not a identification of individual in the file {2}.".format(code_exception, param1, param2))
+            Message.print('error', "*** ERROR {0}: The restriction sites of both enzimes have the same sequence: {1}.".format(code_exception, param1))
         elif code_exception == 'L007':
-            Message.print('error', "*** ERROR {0}: The identification of replicated individual {1} is a identification of other replicated individual in the file {2}.".format(code_exception, param1, param2))
+            Message.print('error', "*** ERROR {0}: The identification of replicated individual {1} is not a identification of individual in the file {2}.".format(code_exception, param1, param2))
         elif code_exception == 'L008':
+            Message.print('error', "*** ERROR {0}: The identification of replicated individual {1} is a identification of other replicated individual in the file {2}.".format(code_exception, param1, param2))
+        elif code_exception == 'L009':
             Message.print('error', "*** ERROR {0}: {1} must be comma-separated float numbers and they must sum 1.0.".format(code_exception, param1))
+        elif code_exception == 'L010':
+            Message.print('error', "*** ERROR {0}: If read type is SE, the file number can not be 2.".format(code_exception))
         elif code_exception == 'S001':
             Message.print('error', '*** ERROR {0}: OS not detected.'.format(code_exception))
         elif code_exception == 'S002':
@@ -2427,18 +2737,24 @@ class Message():
     #---------------
 
     def set_verbose_status(status):
+        '''
+        '''
 
         Message.verbose_status = status
 
     #---------------
 
     def set_trace_status(status):
+        '''
+        '''
 
         Message.trace_status = status
 
     #---------------
 
     def print(message_type, message_text):
+        '''
+        '''
 
         if message_type == 'info':
             print(message_text, file=sys.stdout)
@@ -2454,6 +2770,15 @@ class Message():
             sys.stderr.flush()
 
     #---------------
+
+#-------------------------------------------------------------------------------
+
+class BreakLoops(Exception):
+    '''
+    This class is used to break out of nested loops
+    '''
+
+    pass
 
 #-------------------------------------------------------------------------------
 

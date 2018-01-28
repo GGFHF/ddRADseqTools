@@ -108,10 +108,43 @@ def build_reads(options_dict):
     # assign the symbol of the indexes and the DBR
     (index1_symbol, index2_symbol, dbr_symbol) = get_symbols()
 
-    # get the restriction sites sequences
+    # get the restriction site sequences
     (ressite1_seq, ressite1_lcut_seq, ressite1_rcut_seq, ressite2_seq, ressite2_lcut_seq, ressite2_rcut_seq) = get_ressites(rsfile, enzyme1, enzyme2)
     Message.print('trace', 'ressite1_seq: {0} - ressite1_lcut_seq: {1} - ressite1_rcut_seq: {2}'.format(ressite1_seq, ressite1_lcut_seq, ressite1_rcut_seq))
     Message.print('trace', 'ressite2_seq: {0} - ressite2_lcut_seq: {1} - ressite2_rcut_seq: {2}'.format(ressite2_seq, ressite2_lcut_seq, ressite2_rcut_seq))
+
+    # verify that the sequences of the restriction sites are different (double digest)
+    if ressite1_seq.upper() == ressite2_seq.upper():
+        raise ProgramError('L006', ressite1_seq.upper())
+
+    # get the length of the restriction sites and the cut restriction sites
+    ressite1_len = len(ressite1_seq)
+    cut_ressite1_len = max(len(ressite1_lcut_seq), len(ressite1_rcut_seq))
+    ressite2_len = len(ressite2_seq)
+    cut_ressite2_len = max(len(ressite2_lcut_seq), len(ressite2_rcut_seq))
+    Message.print('trace', 'ressite1_len: {0} - cut_ressite1_len: {1} - ressite2_len: {2} - cut_ressite2_len: {3}'.format(ressite1_len, cut_ressite1_len, ressite2_len, cut_ressite2_len))
+
+    # get the restriction overhang sequences
+    if len(ressite1_lcut_seq) >= len(ressite1_rcut_seq):
+        resoverhang1_seq = get_reverse_complementary_sequence(ressite1_lcut_seq)
+    else:
+        resoverhang1_seq = ressite1_rcut_seq
+    if len(ressite2_lcut_seq) >= len(ressite2_rcut_seq):
+        resoverhang2_seq = ressite1_lcut_seq
+    else:
+        resoverhang2_seq = get_reverse_complementary_sequence(ressite2_rcut_seq)
+    Message.print('trace', 'resoverhang1_seq: {0} - resoverhang2_seq: {1}'.format(resoverhang1_seq, resoverhang2_seq))
+
+    # get the length of the restriction overhangs
+    resoverhang1_len = len(resoverhang1_seq)
+    resoverhang2_len = len(resoverhang2_seq)
+    Message.print('trace', 'resoverhang1_len: {0} - resoverhang2_len: {1}'.format(resoverhang1_len, resoverhang2_len))
+
+    # get the list of restriction overhang sequences corresponding to each enzyme
+    unambiguous_resoverhang1_seq_list = get_unambiguous_sequence_list(resoverhang1_seq.upper())
+    unambiguous_resoverhang2_seq_list = get_unambiguous_sequence_list(resoverhang2_seq.upper())
+    Message.print('trace', 'unambiguous_resoverhang1_seq_list: {0}'.format(unambiguous_resoverhang1_seq_list))
+    Message.print('trace', 'unambiguous_resoverhang2_seq_list: {0}'.format(unambiguous_resoverhang2_seq_list))
 
     # get the end sequences and the DBR strand
     (wend_seq, cend_seq, dbr_strand) = get_ends(endsfile, wend, cend, technique, index1len, index1_symbol, index2len, index2_symbol, dbrlen, dbr_symbol)
@@ -168,17 +201,23 @@ def build_reads(options_dict):
         order = data_fragment[3]
         Message.print('trace', 'order: {0} - fragment_num: {1}'.format(order, fragment_num))
 
-        # verify the restriction sites of the locus fragment
-        if fragment_seq[:len(ressite1_rcut_seq)].upper() != ressite1_rcut_seq.upper():
+        # verify the restriction overhang sequences of the locus fragment
+        if fragment_seq[:resoverhang1_len].upper() not in unambiguous_resoverhang1_seq_list:
             raise ProgramError('D304', enzyme1, "5'", fragment_num)
-        if fragment_seq[(len(fragment_seq) - len(ressite2_lcut_seq)):].upper() != ressite2_lcut_seq.upper():
+        if fragment_seq[(len(fragment_seq) - resoverhang2_len):].upper() not in unambiguous_resoverhang2_seq_list:
             raise ProgramError('D304', enzyme2, "3'", fragment_num)
 
+        # get the unambiguous sequences corresponding to each restriction site
+        unambiguous_resoverhang1_seq = fragment_seq[:resoverhang1_len]
+        unambiguous_resoverhang2_seq = fragment_seq[(len(fragment_seq) - resoverhang2_len):]
+        Message.print('trace', 'unambiguous_resoverhang1_seq: {0} - unambiguous_resoverhang2_seq: {1}'.format(unambiguous_resoverhang1_seq, unambiguous_resoverhang2_seq))
+
         # get the sequence of the locus fragment
-        fragment_seq = fragment_seq[len(ressite1_rcut_seq):(len(fragment_seq) - len(ressite2_lcut_seq))]
+        fragment_seq = fragment_seq[resoverhang1_len:(len(fragment_seq) - resoverhang2_len)]
+        Message.print('trace', 'fragment_seq: {0}'.format(fragment_seq))
 
         # control the fragment sequence lenght is greater o equal to insertlen
-        if len(fragment_seq) < (insertlen - len(ressite1_rcut_seq) - len(ressite2_lcut_seq)):
+        if len(fragment_seq) < insertlen:
             continue
 
         # add 1 to the count of loci
@@ -205,7 +244,7 @@ def build_reads(options_dict):
 
             # append mutated sequences
             for i in range(mutated_seq_num):
-                mutated_seq = mutate_sequence(fragment_seq, indelprob, maxindelsize, locusmaxmut, (insertlen - len(ressite1_rcut_seq) - len(ressite2_lcut_seq)), ressite1_seq, ressite2_seq)
+                mutated_seq = mutate_sequence(fragment_seq, indelprob, maxindelsize, locusmaxmut, (resoverhang1_len + len(fragment_seq) + resoverhang2_len), unambiguous_resoverhang1_seq_list, unambiguous_resoverhang2_seq_list)
                 mutated_seqs_list.append(mutated_seq)
                 Message.print('trace', '    Mutated sequence {0}     : {1}'.format(i, mutated_seqs_list[i]))
                 Message.print('trace', '                             _123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789')
@@ -257,7 +296,7 @@ def build_reads(options_dict):
                             individuals_dict[individual_key]['allele2_isthere_dropout'] = individuals_dict[individual_key2]['allele2_isthere_dropout']
                             break
 
-        # there aren't mutations
+        # there are not mutations
         else:
 
             # assign the locus sequence to both alleles
@@ -326,12 +365,13 @@ def build_reads(options_dict):
                     merged_cend_seq = merge_sequence(merged_cend_seq, dbr_symbol * dbrlen, dbr_seq)
 
             # build the complete read sequence of the Watson strand
-            watson_strand_seq = merged_wend_seq + ressite1_rcut_seq + individual_allele_seq[:(insertlen- len(ressite1_rcut_seq))]
+            watson_strand_seq = merged_wend_seq + unambiguous_resoverhang1_seq + individual_allele_seq[:insertlen - resoverhang1_len:]
+            Message.print('trace', 'watson_strand_seq: {0}'.format(watson_strand_seq))
 
             # if readtype is PE, build the complete read sequence of the Crick strand
             if readtype == 'PE':
-                crick_strand_seq = merged_cend_seq + ressite2_rcut_seq + get_reversed_complementary_sequence(individual_allele_seq)[:insertlen - len(ressite2_rcut_seq)]
-
+                crick_strand_seq =  merged_cend_seq + get_reverse_complementary_sequence(unambiguous_resoverhang2_seq) + get_reverse_complementary_sequence(individual_allele_seq)[:insertlen - resoverhang2_len]
+                Message.print('trace', 'crick_strand_seq: {0}'.format(crick_strand_seq))
 
             # get the PCR duplicates number
             pcrdup_num = calculate_pcrdup_num(pcrdup, pcrdistribution, multiparam, poissonparam)

@@ -1,9 +1,9 @@
 # This file contains the restriction sites recognition motifs and their cut sites
 # (a cut site is represented by * in the sequence).
 # New enzymes can be included at the end of the file
-#
+
 # RECORD FORMAT: enzyme_id;restriction_site_seq(5'->3')
-#
+
 AatII;GACGT*C
 Acc65I;G*GTACC
 AclI;AA*CGTT
@@ -80,3 +80,9 @@ SwaI;ATTT*AAAT
 XbaI;T*CTAGA
 XhoI;C*TCGAG
 XmaI;C*CCGGG
+
+AccI;GT*MKAC
+AccB1I;G*GYRCC
+AccB2I;RGCGC*Y
+AceI;G*CWGC
+AdeI;CACNNN*GTG
