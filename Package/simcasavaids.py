@@ -80,6 +80,18 @@ def fix_identifiers(options_dict):
     readtype = options_dict['readtype']['value']
     input_readfile = options_dict['input_readfile']['value']
     filenum = options_dict['filenum']['value']
+    verbose = options_dict['verbose']['value']
+    trace = options_dict['trace']['value']
+
+    # set the verbose and trace status
+    if verbose.upper() == 'YES':
+        Message.set_verbose_status(True)
+    else:
+        Message.set_verbose_status(False)
+    if trace.upper() == 'YES':
+        Message.set_trace_status(True)
+    else:
+        Message.set_trace_status(False)
 
     # verify if the file number is OK
     if filenum == '2' and readtype == 'SE':

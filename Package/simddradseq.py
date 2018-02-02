@@ -124,6 +124,12 @@ def build_reads(options_dict):
     cut_ressite2_len = max(len(ressite2_lcut_seq), len(ressite2_rcut_seq))
     Message.print('trace', 'ressite1_len: {0} - cut_ressite1_len: {1} - ressite2_len: {2} - cut_ressite2_len: {3}'.format(ressite1_len, cut_ressite1_len, ressite2_len, cut_ressite2_len))
 
+    # get the list of unambiguous restriction site sequences corresponding to each enzyme
+    unambiguous_ressite1_seq_list = get_unambiguous_sequence_list(ressite1_seq.upper())
+    unambiguous_ressite2_seq_list = get_unambiguous_sequence_list(ressite2_seq.upper())
+    Message.print('trace', 'unambiguous_ressite1_seq_list: {0}'.format(unambiguous_ressite1_seq_list))
+    Message.print('trace', 'unambiguous_ressite2_seq_list: {0}'.format(unambiguous_ressite2_seq_list))
+
     # get the restriction overhang sequences
     if len(ressite1_lcut_seq) >= len(ressite1_rcut_seq):
         resoverhang1_seq = get_reverse_complementary_sequence(ressite1_lcut_seq)
@@ -140,7 +146,7 @@ def build_reads(options_dict):
     resoverhang2_len = len(resoverhang2_seq)
     Message.print('trace', 'resoverhang1_len: {0} - resoverhang2_len: {1}'.format(resoverhang1_len, resoverhang2_len))
 
-    # get the list of restriction overhang sequences corresponding to each enzyme
+    # get the list of unambiguous restriction overhang sequences corresponding to each enzyme
     unambiguous_resoverhang1_seq_list = get_unambiguous_sequence_list(resoverhang1_seq.upper())
     unambiguous_resoverhang2_seq_list = get_unambiguous_sequence_list(resoverhang2_seq.upper())
     Message.print('trace', 'unambiguous_resoverhang1_seq_list: {0}'.format(unambiguous_resoverhang1_seq_list))
@@ -232,22 +238,21 @@ def build_reads(options_dict):
             # assign the maximum mutated sequences number (usually 1)
             max_mutated_seq_num = 1    # always 1 in this version
 
-            # get the mutations number (between 1 and the maximum mutated squences number)
+            # get the mutations number (between 1 and the maximum mutated sequences number)
             mutated_seq_num = random.randrange(1, max_mutated_seq_num + 1)
             Message.print('trace', 'The fragment of locus {0} has {1} mutation(s) sequence(s).'.format(loci_count, mutated_seq_num))
-            Message.print('trace', '    Original sequence      : {0}'.format(fragment_seq))
-            Message.print('trace', '                             _123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789')
-
 
             # initialize the fragment sequences list
             mutated_seqs_list = []
 
             # append mutated sequences
             for i in range(mutated_seq_num):
-                mutated_seq = mutate_sequence(fragment_seq, indelprob, maxindelsize, locusmaxmut, (resoverhang1_len + len(fragment_seq) + resoverhang2_len), unambiguous_resoverhang1_seq_list, unambiguous_resoverhang2_seq_list)
+                # -- mutated_seq = mutate_sequence(fragment_seq, indelprob, maxindelsize, locusmaxmut, (resoverhang1_len + len(fragment_seq) + resoverhang2_len), unambiguous_ressite1_seq_list, unambiguous_ressite2_seq_list)
+                mutated_seq = mutate_sequence(fragment_seq, indelprob, maxindelsize, locusmaxmut, (insertlen - resoverhang1_len - resoverhang2_len), unambiguous_ressite1_seq_list, unambiguous_ressite2_seq_list)
                 mutated_seqs_list.append(mutated_seq)
+                Message.print('trace', '    Original sequence      : {0}'.format(fragment_seq))
                 Message.print('trace', '    Mutated sequence {0}     : {1}'.format(i, mutated_seqs_list[i]))
-                Message.print('trace', '                             _123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789')
+                Message.print('trace', '                             _123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789_123456789')
 
             # assign data of both alleles
             for individual_key in individual_keys_list:

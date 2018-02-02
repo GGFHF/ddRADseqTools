@@ -52,7 +52,7 @@ def get_project_version():
     '''
 
     # assign the project version
-    project_version = '0.44'
+    project_version = '0.45'
 
     # return the project name:
     return project_version

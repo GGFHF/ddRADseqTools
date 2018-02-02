@@ -1,4 +1,12 @@
-CURRENT VERSION: 0.44
+CURRENT VERSION: 0.45
+
+********************************************************************************
+
+Changes of v 0.44 to v 0.45 (February 2018)
+
+* Review of parameter values when the mutation function is called in rsitesearch.py.
+
+* Processing of verbose and trace options of simcasavaids.py.
 
 ********************************************************************************
 
