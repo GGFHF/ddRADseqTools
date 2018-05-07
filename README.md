@@ -15,6 +15,7 @@ Refer to the ddRADseqTools-manual.pdf in the "Package/manual" folder for install
 instructions, a description of the software and examples of use.
 
 Also, you can see the paper:
+
     Mora-Márquez F, García-Olivares V, Emerson BC, López de Heredia U (2017)
     ddRADseqTools: a software package for in silico simulation and testing of
     double-digest RADseq experiments. *Molecular Ecology Resources*, **17**,
